@@ -1799,12 +1799,12 @@ body {
 }
 
 @keyframes fadein {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fadein {
-  animation: fadein 0.4s ease-in-out;
+  animation: fadein 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @keyframes scaleIn {
@@ -2185,3 +2185,112 @@ body {
 /* ── UTILITIES ───────────────────────────────────────────────── */
 .divider { height: 1px; background: var(--line); margin: var(--space-md) 0; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
+/* ── MOBILE BACK BUTTON (hidden on desktop) ─────────────────── */
+.mobile-back-btn {
+  display: none;
+}
+
+/* ── MOBILE RESPONSIVE ───────────────────────────────────────── */
+@media (max-width: 767px) {
+  /* Mobile back button */
+  .mobile-back-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 50;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--line);
+    color: var(--ink-2);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .mobile-back-btn:hover {
+    color: var(--ink);
+    border-color: rgba(107, 78, 255, 0.3);
+  }
+
+  /* Chat layout: hide sidebar, full width */
+  .chat-layout {
+    grid-template-columns: 1fr;
+  }
+  .chat-layout .sidebar {
+    display: none;
+  }
+
+  /* Chat topbar CTAs: smaller on mobile */
+  .chat-topbar-ctas {
+    gap: 6px;
+  }
+  .chat-topbar-ctas a {
+    font-size: 11px;
+    padding: 6px 10px !important;
+  }
+
+  /* Landing headline */
+  .landing-headline {
+    font-size: clamp(26px, 7vw, 36px);
+  }
+
+  /* Landing subtitle */
+  .landing-subtitle {
+    font-size: 14px;
+  }
+
+  /* Landing search: full width, smaller padding */
+  .landing-search-wrap {
+    max-width: 100%;
+  }
+
+  /* Suggestion buttons: wrap and take less space */
+  .suggestion-btn {
+    font-size: 12px;
+    padding: 7px 12px;
+    white-space: normal;
+    text-align: left;
+  }
+
+  /* Featured projects: single column */
+  .featured-projects-section--landing {
+    margin-top: 2.5rem;
+  }
+
+  /* Landing main: tighter horizontal padding */
+  .landing-main {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* Project modal: taller on mobile */
+  .project-modal-card {
+    max-height: min(95dvh, calc(100vh - 16px));
+    border-radius: 16px;
+    margin: 0 8px;
+    width: calc(100% - 16px);
+    max-width: 100%;
+  }
+
+  /* Chat messages: tighter padding */
+  .chat-messages {
+    padding: 16px 12px;
+  }
+
+  /* Chat input: tighter */
+  .chat-input-area {
+    padding: 12px;
+  }
+}
+
+/* Very small screens: hide LinkedIn/Email CTAs, keep language switcher */
+@media (max-width: 420px) {
+  .chat-topbar-ctas a {
+    display: none;
+  }
+}

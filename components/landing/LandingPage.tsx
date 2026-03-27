@@ -161,7 +161,7 @@ export function LandingPage() {
       </div>
 
       {/* Main content */}
-      <main className="landing-main relative flex-1 flex flex-col items-center pb-10 px-6" style={{ paddingTop: '80px' }}>
+      <main className="landing-main relative flex-1 flex flex-col items-center pb-10 px-6 pt-[60px] md:pt-[80px]">
         {/* Background orbs */}
         <div className="landing-bg-fx" aria-hidden>
           <div className="landing-orb landing-orb-1" />
@@ -199,19 +199,17 @@ export function LandingPage() {
           </button>
         </div>
 
-        {/* Quick suggestions - 1 line with 3 */}
-        <div className="flex flex-col gap-3 w-full hero-anim-4" style={{ marginTop: '12px' }}>
-          <div className="flex gap-3 w-full justify-center">
-            {t.suggestedQuestions.slice(0, 3).map((q) => (
-              <button
-                key={q}
-                onClick={() => handleSuggestionClick(q)}
-                className="suggestion-btn"
-              >
-                {q}
-              </button>
-            ))}
-          </div>
+        {/* Quick suggestions */}
+        <div className="flex flex-wrap gap-2 w-full justify-center hero-anim-4" style={{ marginTop: '12px' }}>
+          {t.suggestedQuestions.slice(0, 3).map((q) => (
+            <button
+              key={q}
+              onClick={() => handleSuggestionClick(q)}
+              className="suggestion-btn"
+            >
+              {q}
+            </button>
+          ))}
         </div>
         </div>
 
