@@ -2186,6 +2186,15 @@ body {
 .divider { height: 1px; background: var(--line); margin: var(--space-md) 0; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
 
+/* ── LANDING SUGGESTIONS (desktop only) ─────────────────────── */
+.landing-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
+}
+
 /* ── VER TODOS BUTTON (landing) ─────────────────────────────── */
 .featured-projects-view-all {
   display: flex;
@@ -2324,6 +2333,11 @@ body {
   /* Landing search: reduce top margin on mobile */
   .landing-search-wrap {
     margin-top: 32px !important;
+  }
+
+  /* Hide suggestion pills on mobile */
+  .landing-suggestions {
+    display: none;
   }
 
   /* Project modal: taller on mobile */

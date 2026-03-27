@@ -197,6 +197,19 @@ export function LandingPage() {
               <Search className="size-5" />
             </button>
           </div>
+
+          {/* Suggestion pills — desktop only */}
+          <div className="landing-suggestions hero-anim-4" style={{ marginTop: '12px' }}>
+            {t.suggestedQuestions.slice(0, 3).map((q) => (
+              <button
+                key={q}
+                onClick={() => enterChatView(q)}
+                className="suggestion-btn"
+              >
+                {q}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Featured projects */}
