@@ -10,17 +10,27 @@ This repository is linked to a [v0](https://v0.app) project. You can continue de
 
 ## Getting Started
 
-First, run the development server:
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Set up environment variables:
+
+```bash
+cp .env.example .env.local
+```
+
+Edit `.env.local` and add your Anthropic API key (get one at [console.anthropic.com](https://console.anthropic.com/)).
+
+3. Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser. The portfolio is an AI chat — ask anything about Axel Klecki.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 

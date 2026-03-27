@@ -1,0 +1,240 @@
+---
+description: Best practices for Next.js code for v0.dev and GitHub (App Router, Tailwind, shadcn/ui, TypeScript)
+globs: "**/*.ts,**/*.tsx,**/app/**/*,**/components/**/*"
+alwaysApply: false
+---
+
+# Next.js + v0 + GitHub – Best Practices
+
+Use this rule **before writing any Next.js code** when deploying to v0.dev and hosting the repo on GitHub.
+
+---
+
+## Stack Constraints
+
+| Layer | Choice | Notes |
+|-------|--------|-------|
+| Framework | Next.js 14+ (App Router) | Use `app/` directory, NOT `pages/` |
+| Styling | Tailwind CSS | Only core utility classes, no custom plugins |
+| UI Components | shadcn/ui | Preferred over raw HTML for complex components |
+| Language | TypeScript | Always `.tsx` / `.ts`, never `.jsx` / `.js` |
+| Package manager | npm | v0 uses npm by default |
+| Hosting | v0.dev | Has specific compatibility constraints (see below) |
+| Repo | GitHub | Follow repo hygiene rules below |
+
+---
+
+## v0.dev Compatibility Rules
+
+1. **No custom servers** – Do not use `server.js` or custom Express/Fastify wrappers.
+2. **Environment variables** – Must be declared in `.env.example`. Secrets go in v0's dashboard, never hardcoded.
+3. **No filesystem writes** – v0 is serverless; avoid `fs.writeFile` or persistent local storage.
+4. **API routes** – Use `app/api/route.ts` (Route Handlers), not `pages/api/`.
+5. **Images** – Use `next/image` with proper `domains` config in `next.config.ts`. For external images, add domains to `remotePatterns`.
+6. **No native Node modules** – Avoid `child_process`, `worker_threads`, etc. in server components or API routes.
+7. **Edge-compatible** – Prefer `export const runtime = 'edge'` for API routes when possible for faster cold starts.
+8. **Single-file components** – Keep CSS-in-JS or styles co-located; avoid separate `.css` files unless using Tailwind's `globals.css`.
+
+---
+
+## Next.js App Router Patterns
+
+### File structure
+```
+app/
+  layout.tsx          ← Root layout (metadata, fonts, providers)
+  page.tsx            ← Home page
+  globals.css         ← Tailwind directives only
+  api/
+    [route]/
+      route.ts        ← API Route Handler
+  [feature]/
+    page.tsx
+    _components/      ← Feature-local components (prefixed _ = not a route)
+components/
+  ui/                 ← shadcn/ui auto-generated components
+  [shared].tsx        ← Shared components
+lib/
+  utils.ts            ← cn() helper and utilities
+  [service].ts        ← Business logic, API clients
+types/
+  index.ts            ← Shared TypeScript types
+```
+
+### Server vs Client components
+- **Default to Server Components** – no `'use client'` unless you need: hooks, event listeners, browser APIs, or state.
+- **Push `'use client'` down** – wrap only the interactive part, not the whole page.
+- **Data fetching** – In Server Components, use `async/await` directly. In Client Components, use SWR or React Query.
+
+```tsx
+// ✅ Good – server component fetches data
+export default async function Page() {
+  const data = await fetchData()
+  return <ClientWidget data={data} />
+}
+
+// ❌ Bad – fetching in client component unnecessarily
+'use client'
+export default function Page() {
+  const [data, setData] = useState(null)
+  useEffect(() => { fetch(...).then(setData) }, [])
+}
+```
+
+### Metadata
+Always define metadata in `layout.tsx` or `page.tsx`:
+```tsx
+export const metadata: Metadata = {
+  title: 'App Name',
+  description: 'Short description',
+}
+```
+
+---
+
+## TypeScript Rules
+
+- Enable `strict: true` in `tsconfig.json`
+- No `any` – use `unknown` and type guards instead
+- Define props with `interface`, not `type` (for components)
+- Export types from `types/index.ts`
+- Use `zod` for runtime validation of API inputs
+
+```ts
+// ✅ API route with zod validation
+import { z } from 'zod'
+const schema = z.object({ name: z.string().min(1) })
+
+export async function POST(req: Request) {
+  const body = schema.safeParse(await req.json())
+  if (!body.success) return Response.json({ error: body.error }, { status: 400 })
+  // ...
+}
+```
+
+---
+
+## Tailwind Best Practices
+
+- Use `cn()` from `lib/utils.ts` for conditional classes (comes with shadcn/ui setup)
+- Avoid arbitrary values `[...]` unless strictly necessary
+- Keep responsive prefixes consistent: `sm:` → `md:` → `lg:`
+- Dark mode: use `dark:` variants if needed, configure in `tailwind.config.ts`
+
+---
+
+## GitHub Repo Hygiene
+
+### Must-have files
+```
+.gitignore          ← Include: node_modules, .env, .next, .vercel
+.env.example        ← All env var keys with placeholder values (NO real secrets)
+README.md           ← Setup instructions, env vars needed, how to run
+next.config.ts      ← Typed config file
+```
+
+### `.gitignore` essentials
+```
+node_modules/
+.next/
+.env
+.env.local
+.vercel
+*.log
+```
+
+### `.env.example` format
+```
+# Database
+DATABASE_URL=postgresql://user:password@host:5432/db
+
+# Auth
+NEXTAUTH_SECRET=your-secret-here
+NEXTAUTH_URL=http://localhost:3000
+
+# External APIs
+OPENAI_API_KEY=sk-...
+```
+
+### README structure
+```md
+## Setup
+1. Clone repo
+2. `npm install`
+3. Copy `.env.example` → `.env.local` and fill values
+4. `npm run dev`
+
+## Deploy
+Push to GitHub → connect to v0.dev
+```
+
+---
+
+## Component Patterns
+
+### shadcn/ui usage
+Always prefer shadcn/ui primitives:
+```tsx
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+```
+
+### Loading & error states
+Every page that fetches data needs:
+```tsx
+// loading.tsx – automatic Suspense boundary
+export default function Loading() {
+  return <div className="animate-pulse">...</div>
+}
+
+// error.tsx – error boundary
+'use client'
+export default function Error({ error, reset }: { error: Error; reset: () => void }) {
+  return <button onClick={reset}>Try again</button>
+}
+```
+
+### Forms
+Use `react-hook-form` + `zod` + shadcn/ui `Form` components:
+```tsx
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+```
+
+---
+
+## Performance Checklist
+
+- [ ] Images use `next/image` with explicit `width` and `height`
+- [ ] Dynamic imports for heavy components: `const Chart = dynamic(() => import('./Chart'), { ssr: false })`
+- [ ] `generateStaticParams` for dynamic routes that can be pre-rendered
+- [ ] No unnecessary `'use client'` directives
+- [ ] API routes validate input with zod before processing
+
+---
+
+## Quick Anti-Patterns to Avoid
+
+| ❌ Avoid | ✅ Do instead |
+|---------|-------------|
+| `pages/` directory | `app/` directory |
+| `<img>` tags | `<Image>` from next/image |
+| Hardcoded secrets | `.env.local` + `.env.example` |
+| `.js` / `.jsx` files | `.ts` / `.tsx` files |
+| `any` type | Proper types or `unknown` |
+| Inline styles | Tailwind classes |
+| `useEffect` for data fetching | Server Components or SWR |
+| Custom CSS files | Tailwind utilities |
+| `console.log` in production code | Remove or use proper logger |
+
+---
+
+## Before Writing Code – Checklist
+
+1. Is this a Server or Client Component? Default to Server.
+2. Does it need env vars? → Add to `.env.example`
+3. Is there user input? → Validate with zod
+4. Are there images? → Use `next/image`
+5. Is there a loading state? → Add `loading.tsx`
+6. Will this be in GitHub? → No secrets, clean `.gitignore`

@@ -1,14 +1,19 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Bricolage_Grotesque, JetBrains_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { MobileOverlay } from '@/components/MobileOverlay'
 import './globals.css'
 
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+const bricolage = Bricolage_Grotesque({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
+});
+const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
+  title: 'Axel Klecki | PM & Design Strategist',
+  description: 'AI-powered portfolio — Ask anything about Axel Klecki',
   generator: 'v0.app',
   icons: {
     icon: [
@@ -36,7 +41,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="font-sans antialiased">
+      <body className={`${bricolage.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
+        <MobileOverlay />
         {children}
         <Analytics />
       </body>

@@ -1,0 +1,44 @@
+---
+slug: dex-aggregator-stylus
+title: DEX Aggregator — Stylus on Arbitrum
+company: WakeUp Labs
+role: Product Manager & UX/UI Designer & Builder
+period: 2025
+status: Shipped
+tags: [PM, UX, UI, DeFi, Arbitrum, Stylus, Web3, Cursor]
+cover: /images/projects/dex-aggregator-stylus/step1.png
+---
+
+## Overview
+
+Fui el PM, diseñador y co-builder de esta Mini-App de DEX Aggregation desplegada en Arbitrum Mainnet. El smart contract core está escrito en Stylus (AssemblyScript), lo que lo convierte en uno de los primeros casos reales de DeFi producción usando Stylus. El objetivo fue demostrar que Stylus es viable para lógica de agregación DeFi compleja — múltiples llamadas externas, routing optimizado, eficiencia de gas — en condiciones reales de producción, no en benchmarks sintéticos. Para el frontend usé Cursor para vibecoding y acelerar la entrega.
+
+## Problem
+
+Las wallets mobile y Mini-Apps existentes son mayormente centralizadas y ofrecen acceso limitado a tokens de baja o media liquidez. Un usuario que quiere comprar un token no listado desde USDC tiene muy pocas opciones simples. Al mismo tiempo, el ecosistema Arbitrum no tenía casos de uso DeFi reales que validaran Stylus frente a Solidity en condiciones de producción — solo benchmarks aislados.
+
+## Process
+
+### Step 1 — Product Definition & Scope
+Definí el scope completo de la Mini-App: un smart contract en Stylus que actúa como DEX aggregator/router, recibe token de entrada, token de salida y amount, ejecuta la mejor ruta disponible contra múltiples DEXs en Arbitrum, y cobra un fee en USDC antes del swap. La UI tenía que ser minimalista, rápida y pensada para entornos mobile y Mini-Apps embebidas.
+
+![Product definition y scope](/images/projects/dex-aggregator-stylus/step1.png)
+
+### Step 2 — UX Design
+Diseñé la interfaz completa: selección de token in/token out, visualización del swap, chart del token seleccionado y vista de portfolio del usuario con assets y valor estimado. El principio de diseño fue claridad y baja fricción — que un usuario pueda hacer un swap en segundos sin entender la complejidad técnica del aggregator detrás.
+
+![UX design de la Mini-App](/images/projects/dex-aggregator-stylus/step2.png)
+
+### Step 3 — UI Design & Vibecoding con Cursor
+Diseñé la UI y la construí directamente con Cursor usando AI-assisted development. Este proyecto fue uno de los primeros donde usé vibecoding de forma intensiva para comprimir el tiempo entre diseño y frontend funcional. Pude iterar sobre la interfaz en horas en lugar de días, manteniéndome cerca del smart contract y ajustando la UI en tiempo real según el comportamiento on-chain.
+
+![UI Design y desarrollo con Cursor](/images/projects/dex-aggregator-stylus/step3.png)
+
+### Step 4 — Deploy en Arbitrum Mainnet & Documentación
+Coordiné el deploy del smart contract en Stylus en Arbitrum Mainnet, el repositorio open source con contratos, frontend y deploy scripts, el video demo y walkthrough técnico, y el blog post publicado en Arbitrum's official blog documentando qué se construyó, cómo se encaró y los aprendizajes principales de Stylus vs Solidity.
+
+![Deploy y documentación técnica](/images/projects/dex-aggregator-stylus/step4.png)
+
+## Result
+
+Mini-App funcional en Arbitrum Mainnet, open source, con blog post publicado en el blog oficial de Arbitrum. El proyecto validó Stylus como viable para casos DeFi reales con múltiples llamadas externas, y sirvió como proof of concept para incentivar la adopción de Stylus por parte de DEX aggregators y protocolos DeFi existentes.
