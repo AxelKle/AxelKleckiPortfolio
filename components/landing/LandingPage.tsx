@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useLayoutEffect, useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { useLanguage } from '@/context/LanguageContext';
@@ -42,6 +43,8 @@ export function LandingPage() {
   const { openProject } = useProject();
   const { t, locale } = useLanguage();
 
+  const isMobile = visibleFeaturedCols === 1;
+
   useEffect(() => {
     fetch(`/api/projects?locale=${locale}`, { cache: 'no-store' })
       .then((res) => res.json())
@@ -57,7 +60,7 @@ export function LandingPage() {
     0,
     featuredProjects.length - visibleFeaturedCols
   );
-  const showFeaturedArrows = featuredProjects.length > visibleFeaturedCols;
+  const showFeaturedArrows = !isMobile && featuredProjects.length > visibleFeaturedCols;
 
   useEffect(() => {
     setFeaturedStart((s) => Math.min(s, featuredMaxStart));
@@ -109,22 +112,18 @@ export function LandingPage() {
     }
   };
 
-  const handleSuggestionClick = (question: string) => {
-    enterChatView(question);
-  };
-
   const openFeaturedProject = (p: ProjectItem) => {
     openProject(p.slug);
   };
 
-  const featuredCard = (p: ProjectItem) => (
+  const featuredCard = (p: ProjectItem, swipe = false) => (
     <button
       key={p.slug}
       type="button"
       onClick={() => openFeaturedProject(p)}
-      className="featured-project-card"
+      className={swipe ? 'featured-project-card featured-project-card--swipe' : 'featured-project-card'}
       style={
-        showFeaturedArrows && slideLayout.cardWidthPx > 0
+        !swipe && showFeaturedArrows && slideLayout.cardWidthPx > 0
           ? {
               width: slideLayout.cardWidthPx,
               minWidth: slideLayout.cardWidthPx,
@@ -140,7 +139,7 @@ export function LandingPage() {
             fill
             className="object-cover"
             style={{ objectPosition: 'top center' }}
-            sizes="(max-width: 767px) 100vw, 292px"
+            sizes="(max-width: 767px) 78vw, 292px"
           />
         ) : (
           <div className="w-full h-full bg-[#E8E4DC]" />
@@ -161,7 +160,7 @@ export function LandingPage() {
       </div>
 
       {/* Main content */}
-      <main className="landing-main relative flex-1 flex flex-col items-center pb-10 px-6 pt-[60px] md:pt-[80px]">
+      <main className="landing-main relative flex-1 flex flex-col items-center pb-10 px-6 pt-[96px] md:pt-[80px]">
         {/* Background orbs */}
         <div className="landing-bg-fx" aria-hidden>
           <div className="landing-orb landing-orb-1" />
@@ -170,99 +169,102 @@ export function LandingPage() {
         </div>
 
         <div className="w-full max-w-4xl flex flex-col items-center relative">
-        {/* Headline - key forces re-render when locale changes */}
-        <h1 key={locale} className="landing-headline text-center w-full hero-anim-1">
-          <span className="block">{t.headline}</span>
-          <span className="text-grad">{t.headlineHighlight}</span>
-        </h1>
-        <p className="landing-subtitle text-center w-full hero-anim-2">
-          {t.subtitle}
-        </p>
+          {/* Headline */}
+          <h1 key={locale} className="landing-headline text-center w-full hero-anim-1">
+            <span className="block">{t.headline}</span>
+            <span className="text-grad">{t.headlineHighlight}</span>
+          </h1>
+          <p className="landing-subtitle text-center w-full hero-anim-2">
+            {t.subtitle}
+          </p>
 
-        {/* Search bar */}
-        <div className="landing-search-wrap w-full hero-anim-3" style={{ marginTop: '48px' }}>
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
-            placeholder={t.searchPlaceholder}
-            className="landing-search-input"
-          />
-          <button
-            type="button"
-            onClick={handleSubmit}
-            disabled={!input.trim()}
-            className="landing-search-btn"
-          >
-            <Search className="size-5" />
-          </button>
-        </div>
-
-        {/* Quick suggestions */}
-        <div className="flex flex-wrap gap-2 w-full justify-center hero-anim-4" style={{ marginTop: '12px' }}>
-          {t.suggestedQuestions.slice(0, 3).map((q) => (
+          {/* Search bar */}
+          <div className="landing-search-wrap w-full hero-anim-3" style={{ marginTop: '48px' }}>
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+              placeholder={t.searchPlaceholder}
+              className="landing-search-input"
+            />
             <button
-              key={q}
-              onClick={() => handleSuggestionClick(q)}
-              className="suggestion-btn"
+              type="button"
+              onClick={handleSubmit}
+              disabled={!input.trim()}
+              className="landing-search-btn"
             >
-              {q}
+              <Search className="size-5" />
             </button>
-          ))}
-        </div>
+          </div>
         </div>
 
-        {/* Featured projects: full main width so nav sits outside the card strip */}
+        {/* Featured projects */}
         {featuredProjects.length > 0 && (
-        <section
-          className={`featured-projects-section featured-projects-section--landing w-full mx-auto relative${showFeaturedArrows ? ' featured-projects-section--landing-wide' : ''}`}
-        >
-          <h2 className="featured-projects-label">{t.featuredProjects}</h2>
-          <div
-            className={`featured-projects-carousel ${showFeaturedArrows ? 'featured-projects-carousel--with-nav' : ''}`}
+          <section
+            className={`featured-projects-section featured-projects-section--landing w-full mx-auto relative${showFeaturedArrows ? ' featured-projects-section--landing-wide' : ''}`}
           >
-            {showFeaturedArrows && (
-              <button
-                type="button"
-                className="featured-projects-nav featured-projects-nav--prev"
-                onClick={goFeaturedPrev}
-                aria-label={t.featuredProjectsPrev}
-              >
-                <ChevronLeft className="size-5" aria-hidden />
-              </button>
-            )}
-            {showFeaturedArrows ? (
-              <div
-                className="featured-projects-viewport"
-                ref={featuredViewportRef}
-              >
-                <div
-                  className="featured-projects-track"
-                  style={{
-                    transform: `translate3d(-${slideLayout.offsetPx}px, 0, 0)`,
-                  }}
-                >
-                  {featuredProjects.map(featuredCard)}
-                </div>
+            <h2 className="featured-projects-label">{t.featuredProjects}</h2>
+
+            {/* Mobile: horizontal swipe */}
+            {isMobile ? (
+              <div className="featured-projects-swipe">
+                {featuredProjects.map((p) => featuredCard(p, true))}
               </div>
             ) : (
-              <div className="featured-projects-grid">
-                {featuredProjects.map(featuredCard)}
+              /* Desktop: arrow carousel or grid */
+              <div
+                className={`featured-projects-carousel ${showFeaturedArrows ? 'featured-projects-carousel--with-nav' : ''}`}
+              >
+                {showFeaturedArrows && (
+                  <button
+                    type="button"
+                    className="featured-projects-nav featured-projects-nav--prev"
+                    onClick={goFeaturedPrev}
+                    aria-label={t.featuredProjectsPrev}
+                  >
+                    <ChevronLeft className="size-5" aria-hidden />
+                  </button>
+                )}
+                {showFeaturedArrows ? (
+                  <div
+                    className="featured-projects-viewport"
+                    ref={featuredViewportRef}
+                  >
+                    <div
+                      className="featured-projects-track"
+                      style={{
+                        transform: `translate3d(-${slideLayout.offsetPx}px, 0, 0)`,
+                      }}
+                    >
+                      {featuredProjects.map((p) => featuredCard(p))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="featured-projects-grid">
+                    {featuredProjects.map((p) => featuredCard(p))}
+                  </div>
+                )}
+                {showFeaturedArrows && (
+                  <button
+                    type="button"
+                    className="featured-projects-nav featured-projects-nav--next"
+                    onClick={goFeaturedNext}
+                    aria-label={t.featuredProjectsNext}
+                  >
+                    <ChevronRight className="size-5" aria-hidden />
+                  </button>
+                )}
               </div>
             )}
-            {showFeaturedArrows && (
-              <button
-                type="button"
-                className="featured-projects-nav featured-projects-nav--next"
-                onClick={goFeaturedNext}
-                aria-label={t.featuredProjectsNext}
-              >
-                <ChevronRight className="size-5" aria-hidden />
-              </button>
-            )}
-          </div>
-        </section>
+
+            {/* Ver todos button */}
+            <div className="featured-projects-view-all">
+              <Link href="/projects" className="featured-view-all-btn">
+                {t.viewAllProjects}
+              </Link>
+            </div>
+          </section>
         )}
       </main>
 
@@ -283,4 +285,3 @@ export function LandingPage() {
     </div>
   );
 }
-
