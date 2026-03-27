@@ -160,7 +160,7 @@ export function LandingPage() {
       </div>
 
       {/* Main content */}
-      <main className="landing-main relative flex-1 flex flex-col items-center pb-10 px-6 pt-[96px] md:pt-[80px]">
+      <main className="landing-main relative flex-1 flex flex-col items-center pb-10 px-6" style={{ paddingTop: '80px' }}>
         {/* Background orbs */}
         <div className="landing-bg-fx" aria-hidden>
           <div className="landing-orb landing-orb-1" />

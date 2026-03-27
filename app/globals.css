@@ -2314,8 +2314,9 @@ body {
     margin-top: 2.5rem;
   }
 
-  /* Landing main: tighter horizontal padding */
+  /* Landing main: más espacio arriba en mobile para el language switcher */
   .landing-main {
+    padding-top: 96px !important;
     padding-left: 16px !important;
     padding-right: 16px !important;
   }
