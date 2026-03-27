@@ -13,8 +13,21 @@ const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mon
 
 export const metadata: Metadata = {
   title: 'Axel Klecki | PM & Design Strategist',
-  description: 'AI-powered portfolio — Ask anything about Axel Klecki',
-  generator: 'v0.app',
+  description: 'Portfolio de Axel Klecki — PM y diseñador. Preguntame lo que quieras sobre mi experiencia, proyectos y forma de trabajar.',
+  metadataBase: new URL('https://axelklecki.site'),
+  openGraph: {
+    title: 'Axel Klecki | PM & Design Strategist',
+    description: 'Portfolio de Axel Klecki — PM y diseñador. Preguntame lo que quieras sobre mi experiencia, proyectos y forma de trabajar.',
+    url: 'https://axelklecki.site',
+    siteName: 'Axel Klecki Portfolio',
+    locale: 'es_AR',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Axel Klecki | PM & Design Strategist',
+    description: 'Portfolio de Axel Klecki — PM y diseñador. Preguntame lo que quieras sobre mi experiencia, proyectos y forma de trabajar.',
+  },
   icons: {
     icon: [
       {
