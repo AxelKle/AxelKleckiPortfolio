@@ -122,16 +122,18 @@ async function buildCV() {
 
   // Section heading — returns y after heading+rule+gap
   function section(label, cy) {
-    // Accent bar sits in the left gutter, outside content area
-    page.drawRectangle({ x: ML - 8, y: cy - 13, width: 3, height: 15, color: C.purple });
-    // Title text starts at ML — same left edge as all body content
+    // Bar vertically centred with the 8pt label text:
+    // 8pt Helvetica ascender ≈ 5.8pt → text occupies cy … cy+5.8, centre ≈ cy+2.9
+    // Bar height 12pt centred at cy+2.9 → y_bottom = cy+2.9-6 = cy-3.1 ≈ cy-3
+    page.drawRectangle({ x: ML - 8, y: cy - 3, width: 3, height: 12, color: C.purple });
+    // Title text at same left edge as all body content
     txt(label.toUpperCase(), ML, cy, { font: bold, size: 8, color: C.dark });
     const ruleY = cy - 15;
     page.drawLine({
       start: { x: ML, y: ruleY }, end: { x: ML + CW, y: ruleY },
       thickness: 0.4, color: C.rule,
     });
-    return ruleY - 9;
+    return ruleY - 14;  // more air between rule and first content line
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -141,21 +143,21 @@ async function buildCV() {
   const HEADER_H = 82;
   drawGradientRect(page, 0, PAGE_H - HEADER_H, PAGE_W, HEADER_H, C.purple, C.pink);
 
-  // Name — top left
-  txt("Axel Klecki", ML, PAGE_H - 24, { font: bold, size: 22, color: C.white });
+  // Name — with top breathing room, pushed toward vertical centre
+  txt("Axel Klecki", ML, PAGE_H - 34, { font: bold, size: 22, color: C.white });
 
-  // Headline — left side, simplified
-  txt("Product Manager & Product Designer", ML, PAGE_H - 48,
+  // Headline — tight below name
+  txt("Product Manager & Product Designer", ML, PAGE_H - 55,
       { font: reg, size: 9.5, color: C.lavender });
 
-  // Contact — stacked, right-aligned
+  // Contact — stacked, right-aligned; vertically aligned with name/headline
   const c1 = "linkedin.com/in/axelklecki";
   const c2 = "axelklecki.site";
   const c1w = reg.widthOfTextAtSize(c1, 8.5);
   const c2w = reg.widthOfTextAtSize(c2, 8.5);
   const rightEdge = ML + CW;
-  txt(c1, rightEdge - c1w, PAGE_H - 32, { font: reg, size: 8.5, color: C.lavender });
-  txt(c2, rightEdge - c2w, PAGE_H - 46, { font: reg, size: 8.5, color: C.lavender });
+  txt(c1, rightEdge - c1w, PAGE_H - 40, { font: reg, size: 8.5, color: C.lavender });
+  txt(c2, rightEdge - c2w, PAGE_H - 55, { font: reg, size: 8.5, color: C.lavender });
 
   // ─── content cursor starts below header ────────────────────────────────────
   let y = PAGE_H - HEADER_H - 20;
@@ -185,7 +187,7 @@ async function buildCV() {
     {
       company: "WakeUp Labs",
       role:    "Product Manager & Design Strategist",
-      meta:    "Oct 2024 – Present  ·  Remote",
+      meta:    "Oct 2024 – Present",
       bullets: [
         "Led product strategy and UX design end-to-end across multiple digital products, from discovery to delivery",
         "Translated complex systems (DeFi, RWA tokenization, Smart Accounts) into intuitive user experiences",
@@ -196,7 +198,7 @@ async function buildCV() {
     {
       company: "Espinosa Consultores",
       role:    "UX/UI Designer",
-      meta:    "Jan 2024 – Oct 2024  ·  Valencia, Spain",
+      meta:    "Jan 2024 – Oct 2024",
       bullets: [
         "Designed corporate websites, e-commerce platforms, and landing pages using user-centered design principles",
         "Developed cohesive brand identities and UX solutions that improved user satisfaction and retention",
@@ -214,7 +216,7 @@ async function buildCV() {
     {
       company: "BAW Electric S.A.",
       role:    "Graphic Designer",
-      meta:    "Dec 2020 – Dec 2021  ·  Buenos Aires",
+      meta:    "Dec 2020 – Dec 2021",
       bullets: [
         "Designed packaging, editorial materials, and brand identity assets enhancing product visibility",
       ],
