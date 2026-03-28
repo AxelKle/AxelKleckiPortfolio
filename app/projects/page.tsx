@@ -89,15 +89,13 @@ function ProjectsPageContent() {
               href="https://linkedin.com/in/axelklecki"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center rounded-full text-[12px] font-medium text-ink-2 hover:text-ink transition-all backdrop-blur-md bg-white/70 border border-[var(--line)] shadow-sm hover:shadow-md hover:border-[rgba(107,78,255,0.25)]"
-              style={{ padding: '8px 14px' }}
+              className="pill-nav-btn"
             >
               {t.linkedIn}
             </a>
             <a
               href="mailto:axel@example.com"
-              className="flex items-center rounded-full text-[12px] font-medium text-ink-2 hover:text-ink transition-all backdrop-blur-md bg-white/70 border border-[var(--line)] shadow-sm hover:shadow-md hover:border-[rgba(107,78,255,0.25)]"
-              style={{ padding: '8px 14px' }}
+              className="pill-nav-btn"
             >
               {t.email}
             </a>
