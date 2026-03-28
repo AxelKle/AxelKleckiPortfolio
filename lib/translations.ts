@@ -40,7 +40,7 @@ export const translations = {
     downloadCV: 'Descargar CV',
 
     // Sidebar
-    name: 'Axel Klecki',
+    name: 'Axel Martín Klecki',
     role: 'Product Manager & Design Strategist',
     projectsLabel: 'Proyectos',
     skillsLabel: 'Skills',
@@ -122,7 +122,7 @@ export const translations = {
     downloadCV: 'Download CV',
 
     // Sidebar
-    name: 'Axel Klecki',
+    name: 'Axel Martín Klecki',
     role: 'Product Manager & Design Strategist',
     projectsLabel: 'Projects',
     skillsLabel: 'Skills',
