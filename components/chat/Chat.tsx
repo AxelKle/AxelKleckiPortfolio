@@ -6,7 +6,6 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { Message } from './Message';
 import { TypingIndicator } from './TypingIndicator';
 import { ChatInput } from './ChatInput';
-import { suggestionRows } from '@/lib/suggestions';
 import { useApp } from '@/context/AppContext';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -83,12 +82,6 @@ export function Chat({ initialQuestion }: ChatProps = {} as ChatProps) {
     }
   };
 
-  const handleSuggestionClick = (question: string) => {
-    if (status === 'ready') {
-      addToChatHistory(question);
-      sendMessage({ text: question });
-    }
-  };
 
   const getMessageContent = (message: { role: string; parts?: Array<{ type: string; text?: string }> }) => {
     if (message.parts) {
@@ -99,45 +92,6 @@ export function Chat({ initialQuestion }: ChatProps = {} as ChatProps) {
     }
     return '';
   };
-
-  if (messages.length === 0) {
-    return (
-      <div className="chat-welcome-screen">
-        <p className="welcome-text text-center">
-          {t.welcomeText}
-        </p>
-        <div className="flex flex-col gap-3 w-full max-w-2xl mx-auto">
-          {suggestionRows.map((count, rowIndex) => {
-            const start = suggestionRows.slice(0, rowIndex).reduce((a, b) => a + b, 0);
-            const rowQuestions = t.suggestedQuestions.slice(start, start + count);
-            return (
-              <div key={rowIndex} className="flex gap-3 w-full justify-center flex-wrap">
-                {rowQuestions.map((q) => (
-                  <button
-                    key={q}
-                    onClick={() => handleSuggestionClick(q)}
-                    disabled={status !== 'ready'}
-                    className="suggestion-btn disabled:opacity-50"
-                  >
-                    {q}
-                  </button>
-                ))}
-              </div>
-            );
-          })}
-        </div>
-        <div className="w-full max-w-2xl mx-auto">
-          <ChatInput
-            value={input}
-            onChange={setInput}
-            onSubmit={handleSubmit}
-            disabled={status !== 'ready'}
-            placeholder={t.chatPlaceholder}
-          />
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="flex flex-col h-full min-h-0 flex-1">
