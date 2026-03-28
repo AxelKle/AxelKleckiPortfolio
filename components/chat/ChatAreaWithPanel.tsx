@@ -2,14 +2,11 @@
 
 import { Chat } from './Chat';
 import { ProjectModalShell } from './ProjectModalShell';
-import { useLanguage } from '@/context/LanguageContext';
-
 interface ChatAreaWithPanelProps {
   initialQuestion?: string;
 }
 
 export function ChatAreaWithPanel({ initialQuestion }: ChatAreaWithPanelProps) {
-  const { locale } = useLanguage();
 
   return (
     <main
@@ -24,7 +21,7 @@ export function ChatAreaWithPanel({ initialQuestion }: ChatAreaWithPanelProps) {
       </div>
 
       <div className="relative z-10 min-w-0 min-h-0 flex flex-col overflow-hidden flex-1">
-        <Chat key={locale} initialQuestion={initialQuestion} />
+        <Chat initialQuestion={initialQuestion} />
       </div>
       <ProjectModalShell />
     </main>
