@@ -1,56 +1,64 @@
 /**
- * generate_cv.mjs
- * Generates Axel Klecki's CV PDF using pdf-lib.
- * Design: clean, modern, ATS-friendly, #6B4EFF purple accent, warm white BG.
+ * generate_cv.mjs — Axel Klecki CV v2
+ * Redesigned: gradient header aligned with website (#6B4EFF → #C254F5),
+ * ATS-optimised metadata, single A4 page, dates right-aligned.
  *
- * Run:  node generate_cv.mjs
+ * Run: node generate_cv.mjs
  */
 
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
-import { writeFileSync, mkdirSync } from "fs";
-import { dirname } from "path";
+import { writeFileSync } from "fs";
 
 // ─── Colours ──────────────────────────────────────────────────────────────────
 
-function hex(h) {
-  return rgb(
-    parseInt(h.slice(1, 3), 16) / 255,
-    parseInt(h.slice(3, 5), 16) / 255,
-    parseInt(h.slice(5, 7), 16) / 255
-  );
-}
-
 const C = {
-  purple:  hex("#6B4EFF"),
-  dark:    hex("#14121A"),
-  mid:     hex("#2D2B35"),
-  gray:    hex("#6B7280"),
-  lgray:   hex("#9CA3AF"),
-  rule:    hex("#E5E3DF"),
-  bg:      hex("#FAFAF8"),
-  headerBg:hex("#F4F1FF"),  // very light purple tint for header area
+  purple:  rgb(107/255,  78/255, 255/255),   // #6B4EFF
+  pink:    rgb(194/255,  84/255, 245/255),   // #C254F5
+  white:   rgb(1, 1, 1),
+  lavender:rgb(0.92, 0.90, 1.0),             // soft white-lavender for header text
+  dark:    rgb( 20/255,  18/255,  26/255),   // #14121A
+  mid:     rgb( 45/255,  43/255,  53/255),   // #2D2B35
+  gray:    rgb(107/255, 114/255, 128/255),   // #6B7280
+  lgray:   rgb(156/255, 163/255, 175/255),   // #9CA3AF
+  rule:    rgb(229/255, 227/255, 223/255),   // #E5E3DF
+  bg:      rgb(250/255, 250/255, 248/255),   // #FAFAF8
 };
 
 // ─── Layout ───────────────────────────────────────────────────────────────────
 
 const PAGE_W  = 595.28;   // A4 pt
 const PAGE_H  = 841.89;
-const ML      = 42;       // ~1.48 cm left margin
-const MR      = 42;
-const MT      = 36;       // top margin
-const MB      = 36;
-const CW      = PAGE_W - ML - MR;  // content width
+const ML      = 40;
+const MR      = 40;
+const MT      = 30;
+const MB      = 28;
+const CW      = PAGE_W - ML - MR;  // 515.28 pt
 
-// ─── Output ───────────────────────────────────────────────────────────────────
-
-const OUTPUT =
+const OUTPUT  =
   "C:\\Users\\axelk\\Documents\\Cursor\\Portfolio\\AxelKleckiPortfolio\\public\\axel-klecki-cv.pdf";
 
-// ─── Word-wrap helpers ────────────────────────────────────────────────────────
+// ─── Gradient helper ──────────────────────────────────────────────────────────
 
-/**
- * Split text into lines that fit within maxWidth at given font/size.
- */
+function drawGradientRect(page, x, y, width, height, from, to, steps = 90) {
+  const sw = width / steps;
+  for (let i = 0; i < steps; i++) {
+    const t = i / (steps - 1);
+    page.drawRectangle({
+      x:      x + i * sw,
+      y,
+      width:  sw + 0.6,   // slight overlap to avoid hairlines
+      height,
+      color: rgb(
+        from.red   + (to.red   - from.red)   * t,
+        from.green + (to.green - from.green) * t,
+        from.blue  + (to.blue  - from.blue)  * t,
+      ),
+    });
+  }
+}
+
+// ─── Word-wrap ────────────────────────────────────────────────────────────────
+
 function wrapLines(text, font, size, maxWidth) {
   const words = text.split(" ");
   const lines = [];
@@ -68,395 +76,294 @@ function wrapLines(text, font, size, maxWidth) {
   return lines;
 }
 
-/**
- * Measure total height of wrapped text block.
- */
-function measureH(text, font, size, maxWidth, lineH) {
-  return wrapLines(text, font, size, maxWidth).length * lineH;
-}
-
-// ─── Page manager ─────────────────────────────────────────────────────────────
-
-class PageManager {
-  constructor(doc) {
-    this.doc = doc;
-    this.page = null;
-    this.y = 0;
-    this._addPage();
-  }
-
-  _addPage() {
-    this.page = this.doc.addPage([PAGE_W, PAGE_H]);
-    // warm white background
-    this.page.drawRectangle({ x: 0, y: 0, width: PAGE_W, height: PAGE_H, color: C.bg });
-    this.y = PAGE_H - MT;
-  }
-
-  /** Ensure `needed` pts are available; break page if not. */
-  ensure(needed) {
-    if (this.y - needed < MB) this._addPage();
-  }
-
-  /** Move cursor down by `pts`. */
-  down(pts) { this.y -= pts; }
-
-  /** Draw a line of text. Returns x-advance for chaining. */
-  text(str, x, { font, size, color = C.dark } = {}) {
-    this.page.drawText(str, { x, y: this.y, font, size, color });
-    return font.widthOfTextAtSize(str, size);
-  }
-
-  /** Draw wrapped paragraph; cursor moves down. Returns height used. */
-  para(text, x, { font, size, color = C.dark, lineH, maxW = CW - (x - ML) } = {}) {
-    const lh = lineH || size * 1.45;
-    const lines = wrapLines(text, font, size, maxW);
-    const totalH = lines.length * lh;
-    this.ensure(totalH);
-    for (const l of lines) {
-      this.page.drawText(l, { x, y: this.y, font, size, color });
-      this.y -= lh;
-    }
-    return totalH;
-  }
-
-  /** Draw a horizontal rule. */
-  rule(x = ML, w = CW, thickness = 0.5, color = C.rule) {
-    this.page.drawLine({
-      start: { x, y: this.y },
-      end:   { x: x + w, y: this.y },
-      thickness,
-      color,
-    });
-  }
-
-  /** Draw a filled rectangle relative to current y (top of rect = this.y). */
-  rect(x, dy, w, h, color) {
-    this.page.drawRectangle({ x, y: this.y - dy - h, width: w, height: h, color });
-  }
-
-  /** Draw a line from (x1,y) to (x2,y) at a fixed absolute y. */
-  hline(x1, x2, absY, thickness, color) {
-    this.page.drawLine({
-      start: { x: x1, y: absY },
-      end:   { x: x2, y: absY },
-      thickness,
-      color,
-    });
-  }
-}
-
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 async function buildCV() {
   const doc = await PDFDocument.create();
+
+  // ATS metadata
   doc.setTitle("Axel Klecki — CV");
   doc.setAuthor("Axel Klecki");
-  doc.setSubject("Curriculum Vitae");
-  doc.setKeywords(["Product Manager", "Product Designer", "UX/UI", "Fintech"]);
+  doc.setSubject("Product Manager & Product Designer");
+  doc.setKeywords([
+    "Product Manager", "Product Designer", "UX Designer", "UI Designer",
+    "Figma", "Fintech", "Web3", "DeFi", "Agile", "Product Strategy",
+    "User Research", "Wireframing", "Prototyping", "Roadmapping",
+    "Stakeholder Management", "React", "AI", "Cursor", "Claude",
+    "End-to-End Product", "Discovery", "Delivery",
+  ]);
 
-  const bold   = await doc.embedFont(StandardFonts.HelveticaBold);
-  const reg    = await doc.embedFont(StandardFonts.Helvetica);
+  const bold = await doc.embedFont(StandardFonts.HelveticaBold);
+  const reg  = await doc.embedFont(StandardFonts.Helvetica);
 
-  const pm = new PageManager(doc);
+  const page = doc.addPage([PAGE_W, PAGE_H]);
+
+  // Warm off-white background
+  page.drawRectangle({ x: 0, y: 0, width: PAGE_W, height: PAGE_H, color: C.bg });
+
+  // ── Micro helpers ────────────────────────────────────────────────────────────
+
+  function txt(str, x, y, { font = reg, size = 9, color = C.dark } = {}) {
+    page.drawText(str, { x, y, font, size, color });
+  }
+
+  function paraAt(text, x, startY, {
+    font = reg, size = 8.5, color = C.mid, lineH = 12.5,
+    maxW = CW - (x - ML),
+  } = {}) {
+    const lines = wrapLines(text, font, size, maxW);
+    let cy = startY;
+    for (const l of lines) {
+      page.drawText(l, { x, y: cy, font, size, color });
+      cy -= lineH;
+    }
+    return startY - cy; // height consumed
+  }
+
+  // Section heading — returns y after heading+rule+gap
+  function section(label, cy) {
+    page.drawRectangle({ x: ML, y: cy - 12, width: 3, height: 14, color: C.purple });
+    txt(label.toUpperCase(), ML + 9, cy, { font: bold, size: 8, color: C.dark });
+    const ruleY = cy - 15;
+    page.drawLine({
+      start: { x: ML, y: ruleY }, end: { x: ML + CW, y: ruleY },
+      thickness: 0.4, color: C.rule,
+    });
+    return ruleY - 9;   // +2pt gap after rule
+  }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // HEADER — light purple-tinted band
+  // HEADER — full-width gradient band
   // ═══════════════════════════════════════════════════════════════════════════
 
-  const headerH = 108;
-  pm.page.drawRectangle({
-    x: 0, y: PAGE_H - headerH,
-    width: PAGE_W, height: headerH,
-    color: C.headerBg,
-  });
-  // Left accent bar inside header
-  pm.page.drawRectangle({
-    x: 0, y: PAGE_H - headerH,
-    width: 5, height: headerH,
-    color: C.purple,
-  });
-
-  pm.y = PAGE_H - MT;
+  const HEADER_H = 82;
+  drawGradientRect(page, 0, PAGE_H - HEADER_H, PAGE_W, HEADER_H, C.purple, C.pink);
 
   // Name
-  pm.text("Axel Klecki", ML, { font: bold, size: 26, color: C.dark });
-  pm.down(30);
+  txt("Axel Klecki", ML, PAGE_H - 22, { font: bold, size: 22, color: C.white });
 
-  // Headline — wrap within content width
-  pm.para(
-    "Product Manager & Product Designer  |  Building user-centric digital products from strategy to execution  |  Fintech, Marketplaces & Emerging Technologies",
-    ML,
-    { font: reg, size: 9.5, color: C.gray, lineH: 14, maxW: CW }
-  );
-  pm.down(4);
-
-  // Contact row (three items)
-  const contact = [
-    "Spain",
-    "linkedin.com/in/axelklecki",
-    "axelklecki.com",
-  ];
-  const colW = CW / 3;
-  // item 1: left
-  pm.text(contact[0], ML, { font: reg, size: 8.5, color: C.lgray });
-  // item 2: center
-  const c2w = reg.widthOfTextAtSize(contact[1], 8.5);
-  pm.text(contact[1], ML + colW + (colW - c2w) / 2, { font: reg, size: 8.5, color: C.lgray });
-  // item 3: right-aligned
-  const c3w = reg.widthOfTextAtSize(contact[2], 8.5);
-  pm.text(contact[2], ML + CW - c3w, { font: reg, size: 8.5, color: C.lgray });
-
-  // Move cursor below header band
-  pm.y = PAGE_H - headerH - 14;
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // Section heading helper
-  // ═══════════════════════════════════════════════════════════════════════════
-
-  function section(label) {
-    pm.ensure(26);
-    // accent bar
-    pm.page.drawRectangle({ x: ML, y: pm.y - 13, width: 3, height: 14, color: C.purple });
-    pm.text(label.toUpperCase(), ML + 9, { font: bold, size: 8.5, color: C.dark });
-    pm.down(16);
-    pm.rule(ML, CW, 0.5, C.rule);
-    pm.down(8);
+  // Headline — one concise line, ATS-rich
+  const headline =
+    "Product Manager & Product Designer  |  Fintech  ·  Web3  ·  AI  |  Strategy to Shipped Product";
+  const hlLines = wrapLines(headline, reg, 9, CW);
+  let hly = PAGE_H - 47;
+  for (const l of hlLines) {
+    txt(l, ML, hly, { font: reg, size: 9, color: C.lavender });
+    hly -= 13;
   }
+
+  // Contact row — pinned to bottom of header band
+  const contactY = PAGE_H - HEADER_H + 13;
+  const contacts = [
+    "linkedin.com/in/axelklecki",
+    "axelklecki.site",
+  ];
+  const sep = "  |  ";
+  const fullContact = contacts[0] + sep + contacts[1];
+  const fcW = reg.widthOfTextAtSize(fullContact, 8);
+  txt(fullContact, (PAGE_W - fcW) / 2, contactY, { font: reg, size: 8, color: C.lavender });
+
+  // ─── content cursor starts below header ────────────────────────────────────
+  let y = PAGE_H - HEADER_H - 20;
 
   // ═══════════════════════════════════════════════════════════════════════════
   // SUMMARY
   // ═══════════════════════════════════════════════════════════════════════════
 
-  section("Summary");
-
-  pm.para(
-    "Product Manager and Product Designer focused on building digital products that balance " +
-    "user experience, business strategy, and technical feasibility. Background combines " +
-    "product strategy and UX/UI design, working end-to-end from discovery and definition " +
-    "to design execution and delivery. Worked across fintech, marketplaces, and emerging " +
-    "technologies, collaborating with cross-functional teams to turn complex ideas into " +
-    "intuitive and scalable products. Recently integrating AI-assisted development workflows " +
-    "using Cursor and Claude AI to rapidly prototype features and accelerate product iteration.",
-    ML,
-    { font: reg, size: 9, color: C.mid, lineH: 13.5 }
+  y = section("Summary", y);
+  const sumH = paraAt(
+    "Product Manager and Product Designer building digital products across fintech, marketplaces, and Web3. " +
+    "Combines product strategy with end-to-end UX/UI design — from discovery and definition to execution and delivery. " +
+    "Experienced working with engineers, founders, and stakeholders to ship scalable, user-centered products. " +
+    "Integrating AI-assisted workflows (Cursor, Claude) for rapid prototyping and product iteration.",
+    ML, y,
+    { font: reg, size: 8.5, color: C.mid, lineH: 14 }
   );
-  pm.down(13);
+  y -= sumH + 20;
 
   // ═══════════════════════════════════════════════════════════════════════════
   // EXPERIENCE
   // ═══════════════════════════════════════════════════════════════════════════
 
-  section("Experience");
+  y = section("Experience", y);
 
-  const experiences = [
+  const jobs = [
     {
       company: "WakeUp Labs",
-      role: "Product Manager & Design Strategist",
-      meta: "October 2024 – Present  |  Remote",
+      role:    "Product Manager & Design Strategist",
+      meta:    "Oct 2024 – Present  ·  Remote",
       bullets: [
-        "Led product strategy and UX design across multiple digital products, end-to-end from discovery and definition to execution and delivery",
-        "Collaborated with engineers, founders, and stakeholders to define roadmaps, validate ideas, and ship scalable products",
-        "Translated complex technical systems (DeFi, RWA tokenization, Smart Accounts) into intuitive user experiences",
-        "Designed product flows, interfaces, and interaction patterns that improve usability, clarity, and engagement",
-        "Used AI-assisted development tools (Cursor, Claude, Vercel, GitHub, Gemini) for prototyping and rapid iteration",
+        "Led product strategy and UX design end-to-end across multiple digital products, from discovery to delivery",
+        "Translated complex systems (DeFi, RWA tokenization, Smart Accounts) into intuitive user experiences",
+        "Collaborated with engineers, founders, and stakeholders to define roadmaps and ship scalable products",
+        "Leveraged AI-assisted tooling (Cursor, Claude, Vercel) for rapid prototyping and product iteration",
       ],
     },
     {
       company: "Espinosa Consultores",
-      role: "UX/UI Designer",
-      meta: "January 2024 – October 2024  |  Valencia, Spain",
+      role:    "UX/UI Designer",
+      meta:    "Jan 2024 – Oct 2024  ·  Valencia, Spain",
       bullets: [
         "Designed corporate websites, e-commerce platforms, and landing pages using user-centered design principles",
-        "Crafted intuitive UX/UI designs that improved user satisfaction and retention",
-        "Developed cohesive brand identities through logo and packaging design",
+        "Developed cohesive brand identities and UX solutions that improved user satisfaction and retention",
       ],
     },
     {
       company: "Kenion",
-      role: "UI Designer",
-      meta: "January 2021 – September 2023",
+      role:    "UI Designer",
+      meta:    "Jan 2021 – Sep 2023",
       bullets: [
-        "Designed user experiences and interfaces for websites, e-commerce platforms, and landing pages",
-        "Conducted user research and developed user archetypes, flows, and wireframes",
-        "Analyzed benchmark data to inform design strategies",
+        "Designed user experiences for websites, e-commerce, and landing pages; conducted user research",
+        "Developed user archetypes, flows, and wireframes informed by benchmark and competitive analysis",
       ],
     },
     {
       company: "BAW Electric S.A.",
-      role: "Graphic Designer",
-      meta: "December 2020 – December 2021  |  Buenos Aires",
+      role:    "Graphic Designer",
+      meta:    "Dec 2020 – Dec 2021  ·  Buenos Aires",
       bullets: [
-        "Developed packaging designs enhancing product visibility and brand identity",
-        "Designed editorial materials including manuals, brochures, and business stationery",
+        "Designed packaging, editorial materials, and brand identity assets enhancing product visibility",
       ],
     },
     {
       company: "Instituto Bet El",
-      role: "Graphic Designer",
-      meta: "August 2019 – December 2020",
+      role:    "Graphic Designer",
+      meta:    "Aug 2019 – Dec 2020",
       bullets: [
-        "Developed comprehensive visual brand identity",
-        "Designed marketing collateral and social media content",
+        "Developed comprehensive visual brand identity and marketing collateral for educational institution",
       ],
     },
   ];
 
-  for (const exp of experiences) {
-    pm.ensure(50);
+  for (const job of jobs) {
+    // Company (bold dark) + meta right-aligned on same line
+    txt(job.company, ML, y, { font: bold, size: 9.5, color: C.dark });
+    const mw = reg.widthOfTextAtSize(job.meta, 7.5);
+    txt(job.meta, ML + CW - mw, y, { font: reg, size: 7.5, color: C.lgray });
+    y -= 13;
 
-    // Company name (bold, dark)
-    pm.text(exp.company, ML, { font: bold, size: 10, color: C.dark });
-    pm.down(13);
-
-    // Role (bold, purple)
-    pm.text(exp.role, ML, { font: bold, size: 9, color: C.purple });
-    pm.down(12);
-
-    // Meta (dates | location, light gray)
-    pm.text(exp.meta, ML, { font: reg, size: 8, color: C.lgray });
-    pm.down(13);
+    // Role
+    txt(job.role, ML, y, { font: bold, size: 8.5, color: C.purple });
+    y -= 12;
 
     // Bullets
-    for (const b of exp.bullets) {
-      const indent = 14;
-      const bMaxW = CW - indent;
-      const bLines = wrapLines(b, reg, 8.5, bMaxW);
-      const bH = bLines.length * 12.5;
-      pm.ensure(bH + 2);
-      // bullet dot
-      pm.page.drawText("•", { x: ML + 2, y: pm.y, font: bold, size: 8.5, color: C.purple });
+    const bMaxW = CW - 12;
+    for (const b of job.bullets) {
+      const bLines = wrapLines(b, reg, 8, bMaxW);
+      page.drawText("•", { x: ML + 1, y, font: bold, size: 8, color: C.purple });
       for (const bl of bLines) {
-        pm.page.drawText(bl, { x: ML + indent, y: pm.y, font: reg, size: 8.5, color: C.mid });
-        pm.down(12.5);
+        page.drawText(bl, { x: ML + 11, y, font: reg, size: 8, color: C.mid });
+        y -= 12.5;
       }
-      pm.down(1);
     }
-    pm.down(7);
+    y -= 10;
   }
+
+  y -= 8;
 
   // ═══════════════════════════════════════════════════════════════════════════
   // EDUCATION
   // ═══════════════════════════════════════════════════════════════════════════
 
-  section("Education");
+  y = section("Education", y);
 
-  const education = [
+  const edu = [
     {
-      institution: "Universidad de Buenos Aires",
-      degree: "Industrial Designer — Industrial and Product Design",
+      inst:  "Universidad de Buenos Aires",
+      deg:   "Industrial Designer — Industrial and Product Design",
       years: "2016 – 2021",
     },
     {
-      institution: "ORT Argentina",
-      degree: "Technical High School — Construction focus",
+      inst:  "ORT Argentina",
+      deg:   "Technical High School — Construction focus",
       years: "2011 – 2015",
     },
   ];
 
-  for (const edu of education) {
-    pm.ensure(38);
-    pm.text(edu.institution, ML, { font: bold, size: 9.5, color: C.dark });
-    pm.down(13);
-    pm.text(edu.degree, ML, { font: reg, size: 9, color: C.gray });
-    pm.down(11);
-    pm.text(edu.years, ML, { font: reg, size: 8, color: C.lgray });
-    pm.down(14);
+  for (const e of edu) {
+    txt(e.inst, ML, y, { font: bold, size: 9, color: C.dark });
+    const yw = reg.widthOfTextAtSize(e.years, 7.5);
+    txt(e.years, ML + CW - yw, y, { font: reg, size: 7.5, color: C.lgray });
+    y -= 13;
+    txt(e.deg, ML, y, { font: reg, size: 8.5, color: C.gray });
+    y -= 16;
   }
-  pm.down(4);
+
+  y -= 8;
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // SKILLS — two-column
+  // SKILLS — two columns
   // ═══════════════════════════════════════════════════════════════════════════
 
-  section("Skills");
+  y = section("Skills", y);
 
   const skills = [
-    "Product Management",
-    "UX/UI Design",
-    "Product Strategy",
-    "User Research",
-    "Wireframing & Prototyping",
-    "Figma",
-    "Stakeholder Management",
-    "Roadmapping",
-    "AI-Assisted Development (Cursor, Claude)",
-    "React.js",
-    "Web3 / DeFi / Fintech",
-    "User-Centered Design",
+    "Product Management",          "Figma",
+    "UX/UI Design",                "Stakeholder Management",
+    "Product Strategy",            "Roadmapping",
+    "User Research",               "AI-Assisted Dev (Cursor, Claude)",
+    "Wireframing & Prototyping",   "React.js",
+    "Web3 / DeFi / Fintech",       "User-Centered Design",
   ];
 
-  const half = Math.ceil(skills.length / 2);
-  const col1 = skills.slice(0, half);
-  const col2 = skills.slice(half);
-  const rowH = 14;
-  const rows = Math.max(col1.length, col2.length);
-  pm.ensure(rows * rowH + 4);
+  const half    = Math.ceil(skills.length / 2);
+  const col1    = skills.slice(0, half);
+  const col2    = skills.slice(half);
+  const skRowH  = 14;
 
-  for (let i = 0; i < rows; i++) {
+  for (let i = 0; i < Math.max(col1.length, col2.length); i++) {
     if (col1[i]) {
-      pm.page.drawText("-", { x: ML, y: pm.y, font: bold, size: 9, color: C.purple });
-      pm.page.drawText(col1[i], { x: ML + 10, y: pm.y, font: reg, size: 9, color: C.dark });
+      page.drawText("•", { x: ML, y, font: bold, size: 8.5, color: C.purple });
+      page.drawText(col1[i], { x: ML + 10, y, font: reg, size: 8.5, color: C.dark });
     }
     if (col2[i]) {
-      pm.page.drawText("-", { x: ML + CW / 2 + 4, y: pm.y, font: bold, size: 9, color: C.purple });
-      pm.page.drawText(col2[i], { x: ML + CW / 2 + 14, y: pm.y, font: reg, size: 9, color: C.dark });
+      page.drawText("•", { x: ML + CW / 2 + 4, y, font: bold, size: 8.5, color: C.purple });
+      page.drawText(col2[i], { x: ML + CW / 2 + 14, y, font: reg, size: 8.5, color: C.dark });
     }
-    pm.down(rowH);
+    y -= skRowH;
   }
-  pm.down(10);
+
+  y -= 12;
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // LANGUAGES
+  // LANGUAGES & CERTIFICATIONS — combined row
   // ═══════════════════════════════════════════════════════════════════════════
 
-  section("Languages");
+  y = section("Languages & Certifications", y);
 
-  pm.ensure(18);
-  pm.text("Spanish", ML, { font: bold, size: 9, color: C.dark });
-  const swW = bold.widthOfTextAtSize("Spanish", 9);
-  pm.text("  Native", ML + swW, { font: reg, size: 9, color: C.gray });
+  // Languages (left + center)
+  txt("Spanish", ML, y, { font: bold, size: 8.5, color: C.dark });
+  txt("  Native", ML + bold.widthOfTextAtSize("Spanish", 8.5), y,
+      { font: reg, size: 8.5, color: C.gray });
 
-  const langSep = CW / 2;
-  pm.text("English", ML + langSep, { font: bold, size: 9, color: C.dark });
-  const ewW = bold.widthOfTextAtSize("English", 9);
-  pm.text("  Full Professional", ML + langSep + ewW, { font: reg, size: 9, color: C.gray });
-  pm.down(18);
-  pm.down(6);
+  const engX = ML + CW / 3;
+  txt("English", engX, y, { font: bold, size: 8.5, color: C.dark });
+  txt("  Full Professional", engX + bold.widthOfTextAtSize("English", 8.5), y,
+      { font: reg, size: 8.5, color: C.gray });
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // CERTIFICATIONS
-  // ═══════════════════════════════════════════════════════════════════════════
+  // Certification (right)
+  const certText = "UX/UI Designer — Certified";
+  const certW = reg.widthOfTextAtSize(certText, 8.5);
+  txt(certText, ML + CW - certW, y, { font: reg, size: 8.5, color: C.gray });
 
-  section("Certifications");
+  y -= 14;
 
-  pm.ensure(16);
-  pm.text("UX/UI Designer", ML, { font: reg, size: 9, color: C.dark });
-  pm.down(16);
-  pm.down(6);
+  // ── Gradient footer bar ──────────────────────────────────────────────────
+  drawGradientRect(page, ML, MB, CW, 2, C.purple, C.pink);
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // AWARDS
-  // ═══════════════════════════════════════════════════════════════════════════
-
-  section("Awards");
-
-  pm.para(
-    "Exhibition of LUNA spacesuit design at Galileo Galilei Planetarium, Buenos Aires",
-    ML,
-    { font: reg, size: 9, color: C.dark, lineH: 13.5 }
-  );
+  // ─── Diagnostics ──────────────────────────────────────────────────────────
+  const pages = doc.getPages().length;
+  console.log(`y at end: ${y.toFixed(1)} pt  (bottom margin: ${MB} pt)`);
+  console.log(`Pages: ${pages}`);
+  if (y < MB) console.warn(`⚠️  Content overflows by ${(MB - y).toFixed(1)} pt`);
 
   // ─── Save ──────────────────────────────────────────────────────────────────
-
-  mkdirSync(dirname(OUTPUT.replace(/\\\\/g, "\\")), { recursive: true });
   const pdfBytes = await doc.save();
   writeFileSync(OUTPUT, pdfBytes);
-  const pages = doc.getPages().length;
-  console.log(`CV saved: ${OUTPUT}`);
-  console.log(`Pages: ${pages}  |  Size: ${(pdfBytes.length / 1024).toFixed(1)} KB`);
+  console.log(`CV saved → ${OUTPUT}  (${(pdfBytes.length / 1024).toFixed(1)} KB)`);
 }
 
-buildCV().catch((err) => {
+buildCV().catch(err => {
   console.error("Error:", err.message);
   process.exit(1);
 });
