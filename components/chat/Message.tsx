@@ -54,7 +54,7 @@ export function Message({ role, content, index = 0 }: MessageProps) {
             {renderTextWithBold(content)}
           </div>
           {companies.length > 0 && (
-            <div className="mt-6 pt-4 border-t border-[var(--line)] flex flex-wrap gap-2">
+            <div className="mt-8 pt-4 border-t border-[var(--line)] flex flex-wrap gap-2">
               {companies.map(({ name, slug }) => (
                 <button
                   key={slug}
@@ -63,7 +63,7 @@ export function Message({ role, content, index = 0 }: MessageProps) {
                   title={name}
                   className="inline-flex items-center gap-0.5 text-[11px] font-medium text-g1 hover:text-g2 px-2 py-1 rounded border border-[var(--line)] hover:border-g1/40 transition-colors bg-transparent cursor-pointer"
                 >
-                  {companies.length > 1 ? `${t.viewProjectNamed} ${name} →` : t.viewProject}
+                  {`${t.viewProjectNamed} ${name} →`}
                 </button>
               ))}
             </div>
