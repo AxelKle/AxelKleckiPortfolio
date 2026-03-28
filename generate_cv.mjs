@@ -7,7 +7,12 @@
  */
 
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
-import { writeFileSync } from "fs";
+import fontkit from "@pdf-lib/fontkit";
+import { writeFileSync, readFileSync } from "fs";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // ─── Colours ──────────────────────────────────────────────────────────────────
 
@@ -36,6 +41,20 @@ const CW      = PAGE_W - ML - MR;  // 515.28 pt
 
 const OUTPUT  =
   "C:\\Users\\axelk\\Documents\\Cursor\\Portfolio\\AxelKleckiPortfolio\\public\\axel-klecki-cv.pdf";
+
+// ─── Grid overlay helper (simulates landing page grid) ────────────────────────
+
+function drawGrid(page, x, y, width, height, cellSize = 22, lineColor = rgb(1,1,1), opacity = 0.10) {
+  const opts = { thickness: 0.5, color: lineColor, opacity };
+  // Vertical lines
+  for (let cx = x; cx <= x + width; cx += cellSize) {
+    page.drawLine({ start: { x: cx, y }, end: { x: cx, y: y + height }, ...opts });
+  }
+  // Horizontal lines
+  for (let cy = y; cy <= y + height; cy += cellSize) {
+    page.drawLine({ start: { x, y: cy }, end: { x: x + width, y: cy }, ...opts });
+  }
+}
 
 // ─── Gradient helper ──────────────────────────────────────────────────────────
 
@@ -80,6 +99,7 @@ function wrapLines(text, font, size, maxWidth) {
 
 async function buildCV() {
   const doc = await PDFDocument.create();
+  doc.registerFontkit(fontkit);
 
   // ATS metadata
   doc.setTitle("Axel Klecki — CV");
@@ -93,8 +113,11 @@ async function buildCV() {
     "End-to-End Product", "Discovery", "Delivery",
   ]);
 
-  const bold = await doc.embedFont(StandardFonts.HelveticaBold);
-  const reg  = await doc.embedFont(StandardFonts.Helvetica);
+  // Embed Bricolage Grotesque (same font as the website)
+  const boldBytes = readFileSync(join(__dirname, "bricolage-700.ttf"));
+  const regBytes  = readFileSync(join(__dirname, "bricolage-400.ttf"));
+  const bold = await doc.embedFont(boldBytes);
+  const reg  = await doc.embedFont(regBytes);
 
   const page = doc.addPage([PAGE_W, PAGE_H]);
 
@@ -140,27 +163,38 @@ async function buildCV() {
   // HEADER — full-width gradient band
   // ═══════════════════════════════════════════════════════════════════════════
 
-  const HEADER_H = 82;
+  const HEADER_H = 88;
+
+  // 1. Gradient base
   drawGradientRect(page, 0, PAGE_H - HEADER_H, PAGE_W, HEADER_H, C.purple, C.pink);
 
-  // Name — with top breathing room, pushed toward vertical centre
-  txt("Axel Klecki", ML, PAGE_H - 34, { font: bold, size: 22, color: C.white });
+  // 2. Semi-transparent dark overlay so grid reads cleaner (opacity 0.18)
+  page.drawRectangle({
+    x: 0, y: PAGE_H - HEADER_H, width: PAGE_W, height: HEADER_H,
+    color: rgb(0.06, 0.04, 0.12), opacity: 0.18,
+  });
 
-  // Headline — tight below name
-  txt("Product Manager & Product Designer", ML, PAGE_H - 55,
+  // 3. Grid pattern — same vibe as landing page crosshatch
+  drawGrid(page, 0, PAGE_H - HEADER_H, PAGE_W, HEADER_H, 22, rgb(1,1,1), 0.12);
+
+  // Name — with top breathing room
+  txt("Axel Klecki", ML, PAGE_H - 38, { font: bold, size: 22, color: C.white });
+
+  // Headline — close below name
+  txt("Product Manager & Product Designer", ML, PAGE_H - 59,
       { font: reg, size: 9.5, color: C.lavender });
 
-  // Contact — stacked, right-aligned; vertically aligned with name/headline
+  // Contact — stacked, right-aligned
   const c1 = "linkedin.com/in/axelklecki";
   const c2 = "axelklecki.site";
   const c1w = reg.widthOfTextAtSize(c1, 8.5);
   const c2w = reg.widthOfTextAtSize(c2, 8.5);
   const rightEdge = ML + CW;
-  txt(c1, rightEdge - c1w, PAGE_H - 40, { font: reg, size: 8.5, color: C.lavender });
-  txt(c2, rightEdge - c2w, PAGE_H - 55, { font: reg, size: 8.5, color: C.lavender });
+  txt(c1, rightEdge - c1w, PAGE_H - 44, { font: reg, size: 8.5, color: C.lavender });
+  txt(c2, rightEdge - c2w, PAGE_H - 59, { font: reg, size: 8.5, color: C.lavender });
 
   // ─── content cursor starts below header ────────────────────────────────────
-  let y = PAGE_H - HEADER_H - 20;
+  let y = PAGE_H - HEADER_H - 18;
 
   // ═══════════════════════════════════════════════════════════════════════════
   // SUMMARY
