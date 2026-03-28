@@ -786,7 +786,7 @@ body {
 }
 
 .project-modal-hero {
-  border-radius: 28px 28px 0 0;
+  /* border-radius handled by parent card's overflow:hidden */
 }
 
 .project-modal-body-scroll {
@@ -1916,7 +1916,7 @@ body {
   width: 100%;
   min-height: 280px;
   overflow: hidden;
-  border-radius: 28px 28px 0 0;
+  /* No border-radius here — the parent card (overflow:hidden) clips the corners */
   display: flex;
   align-items: flex-end;
   flex-shrink: 0;
