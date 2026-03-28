@@ -122,14 +122,16 @@ async function buildCV() {
 
   // Section heading — returns y after heading+rule+gap
   function section(label, cy) {
-    page.drawRectangle({ x: ML, y: cy - 12, width: 3, height: 14, color: C.purple });
-    txt(label.toUpperCase(), ML + 9, cy, { font: bold, size: 8, color: C.dark });
+    // Accent bar sits in the left gutter, outside content area
+    page.drawRectangle({ x: ML - 8, y: cy - 13, width: 3, height: 15, color: C.purple });
+    // Title text starts at ML — same left edge as all body content
+    txt(label.toUpperCase(), ML, cy, { font: bold, size: 8, color: C.dark });
     const ruleY = cy - 15;
     page.drawLine({
       start: { x: ML, y: ruleY }, end: { x: ML + CW, y: ruleY },
       thickness: 0.4, color: C.rule,
     });
-    return ruleY - 9;   // +2pt gap after rule
+    return ruleY - 9;
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -139,29 +141,21 @@ async function buildCV() {
   const HEADER_H = 82;
   drawGradientRect(page, 0, PAGE_H - HEADER_H, PAGE_W, HEADER_H, C.purple, C.pink);
 
-  // Name
-  txt("Axel Klecki", ML, PAGE_H - 22, { font: bold, size: 22, color: C.white });
+  // Name — top left
+  txt("Axel Klecki", ML, PAGE_H - 24, { font: bold, size: 22, color: C.white });
 
-  // Headline — one concise line, ATS-rich
-  const headline =
-    "Product Manager & Product Designer  |  Fintech  ·  Web3  ·  AI  |  Strategy to Shipped Product";
-  const hlLines = wrapLines(headline, reg, 9, CW);
-  let hly = PAGE_H - 47;
-  for (const l of hlLines) {
-    txt(l, ML, hly, { font: reg, size: 9, color: C.lavender });
-    hly -= 13;
-  }
+  // Headline — left side, simplified
+  txt("Product Manager & Product Designer", ML, PAGE_H - 48,
+      { font: reg, size: 9.5, color: C.lavender });
 
-  // Contact row — pinned to bottom of header band
-  const contactY = PAGE_H - HEADER_H + 13;
-  const contacts = [
-    "linkedin.com/in/axelklecki",
-    "axelklecki.site",
-  ];
-  const sep = "  |  ";
-  const fullContact = contacts[0] + sep + contacts[1];
-  const fcW = reg.widthOfTextAtSize(fullContact, 8);
-  txt(fullContact, (PAGE_W - fcW) / 2, contactY, { font: reg, size: 8, color: C.lavender });
+  // Contact — stacked, right-aligned
+  const c1 = "linkedin.com/in/axelklecki";
+  const c2 = "axelklecki.site";
+  const c1w = reg.widthOfTextAtSize(c1, 8.5);
+  const c2w = reg.widthOfTextAtSize(c2, 8.5);
+  const rightEdge = ML + CW;
+  txt(c1, rightEdge - c1w, PAGE_H - 32, { font: reg, size: 8.5, color: C.lavender });
+  txt(c2, rightEdge - c2w, PAGE_H - 46, { font: reg, size: 8.5, color: C.lavender });
 
   // ─── content cursor starts below header ────────────────────────────────────
   let y = PAGE_H - HEADER_H - 20;
