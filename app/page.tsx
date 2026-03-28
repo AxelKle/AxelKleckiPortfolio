@@ -43,6 +43,13 @@ function PageContent() {
       <div className="chat-topbar-ctas fixed top-5 right-5 z-50 flex items-center gap-2">
         <LanguageSwitcher />
         <a
+          href="/axel-klecki-cv.pdf"
+          download="Axel_Klecki_CV.pdf"
+          className="pill-nav-btn pill-nav-btn--cv"
+        >
+          {t.downloadCV}
+        </a>
+        <a
           href="https://linkedin.com/in/axelklecki"
           target="_blank"
           rel="noopener noreferrer"

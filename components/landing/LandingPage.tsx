@@ -154,8 +154,15 @@ export function LandingPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-warm">
-      {/* Floating language switcher */}
-      <div className="fixed top-4 right-4 z-50">
+      {/* Floating nav: language switcher + CV download */}
+      <div className="fixed top-4 right-4 z-50 flex items-center gap-2">
+        <a
+          href="/axel-klecki-cv.pdf"
+          download="Axel_Klecki_CV.pdf"
+          className="pill-nav-btn pill-nav-btn--cv"
+        >
+          {t.downloadCV}
+        </a>
         <LanguageSwitcher />
       </div>
 
@@ -294,6 +301,13 @@ export function LandingPage() {
             {t.connectLinkedIn}
           </a>
         </p>
+        <a
+          href="/axel-klecki-cv.pdf"
+          download="Axel_Klecki_CV.pdf"
+          className="pill-nav-btn mt-3"
+        >
+          {t.downloadCV}
+        </a>
       </footer>
     </div>
   );

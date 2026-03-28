@@ -1783,8 +1783,10 @@ body {
 .landing-footer {
   padding: 20px var(--space-xl) var(--space-xl);
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 8px;
   border-top: 1px solid var(--line);
   background: var(--surface);
 }
@@ -2443,9 +2445,9 @@ body {
   }
 }
 
-/* Very small screens: hide LinkedIn/Email CTAs, keep language switcher */
+/* Very small screens: hide LinkedIn/Email CTAs, keep language switcher + CV */
 @media (max-width: 420px) {
-  .chat-topbar-ctas a {
+  .chat-topbar-ctas a:not(.pill-nav-btn--cv) {
     display: none;
   }
 }

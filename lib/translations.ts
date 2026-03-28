@@ -37,6 +37,7 @@ export const translations = {
     available: 'Disponible',
     linkedIn: 'LinkedIn',
     email: 'Email',
+    downloadCV: 'Descargar CV',
 
     // Sidebar
     name: 'Axel Klecki',
@@ -116,6 +117,7 @@ export const translations = {
     available: 'Available',
     linkedIn: 'LinkedIn',
     email: 'Email',
+    downloadCV: 'Download CV',
 
     // Sidebar
     name: 'Axel Klecki',
