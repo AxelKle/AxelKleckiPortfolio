@@ -190,18 +190,22 @@ export function Chat({ initialQuestion }: ChatProps = {} as ChatProps) {
   return (
     <div className="flex flex-col h-full min-h-0 flex-1">
       <div className="chat-messages flex-1 min-h-0 overflow-y-auto">
-        {messages.map((message, index) => {
-          const isLastAssistant = message.role === 'assistant' && index === messages.length - 1;
-          return (
-            <div key={`${message.id}-${index}`} ref={isLastAssistant ? aiResponseStartRef : undefined}>
-              <Message
-                role={message.role as 'user' | 'assistant'}
-                content={getMessageContent(message)}
-                index={index}
-              />
-            </div>
-          );
-        })}
+        {(() => {
+          let aiCount = 0;
+          return messages.map((message, index) => {
+            const isLastAssistant = message.role === 'assistant' && index === messages.length - 1;
+            const aiIndex = message.role === 'assistant' ? aiCount++ : -1;
+            return (
+              <div key={`${message.id}-${index}`} ref={isLastAssistant ? aiResponseStartRef : undefined}>
+                <Message
+                  role={message.role as 'user' | 'assistant'}
+                  content={getMessageContent(message)}
+                  index={aiIndex}
+                />
+              </div>
+            );
+          });
+        })()}
 
         {(status === 'submitted' || status === 'streaming') && <TypingIndicator />}
 
