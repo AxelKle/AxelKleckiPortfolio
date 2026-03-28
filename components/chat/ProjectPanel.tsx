@@ -172,8 +172,8 @@ export function ProjectPanel() {
 
               {/* Scroll hint arrow */}
               <span className="project-detail-hero-scroll-hint" aria-hidden="true">
-                <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-                  <path d="M6 10L14 18L22 10" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M3 6L8 11L13 6" stroke="#14121A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </span>
             </div>

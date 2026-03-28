@@ -2006,21 +2006,25 @@ body {
 /* Scroll hint arrow */
 .project-detail-hero-scroll-hint {
   position: absolute;
-  bottom: 16px;
+  bottom: -14px;
   left: 50%;
-  transform: translateX(-50%);
-  z-index: 5;
+  z-index: 15;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
   animation: hero-scroll-bounce 1.4s ease-in-out infinite;
   pointer-events: none;
 }
 
 @keyframes hero-scroll-bounce {
-  0%   { transform: translateX(-50%) translateY(-4px); opacity: 0.4; }
-  50%  { transform: translateX(-50%) translateY(4px);  opacity: 1;   }
-  100% { transform: translateX(-50%) translateY(-4px); opacity: 0.4; }
+  0%   { transform: translateX(-50%) translateY(-3px); opacity: 0.7; }
+  50%  { transform: translateX(-50%) translateY(3px);  opacity: 1;   }
+  100% { transform: translateX(-50%) translateY(-3px); opacity: 0.7; }
 }
 
 /* Hero text content */
