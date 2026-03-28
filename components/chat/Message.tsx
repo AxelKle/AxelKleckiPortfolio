@@ -4,9 +4,12 @@ import { getCompaniesMentionedInText } from '@/lib/companyLinks';
 import { useProject } from '@/context/ProjectContext';
 import { useLanguage } from '@/context/LanguageContext';
 
+const PM_DESIGN_ICONS = ['◎', '△', '◇', '⬡', '✦', '◈', '⊕', '◆'];
+
 interface MessageProps {
   role: 'user' | 'assistant';
   content: string;
+  index?: number;
 }
 
 function renderTextWithBold(text: string) {
@@ -21,10 +24,11 @@ function renderTextWithBold(text: string) {
   );
 }
 
-export function Message({ role, content }: MessageProps) {
+export function Message({ role, content, index = 0 }: MessageProps) {
   const { openProject } = useProject();
   const { t } = useLanguage();
   const isUser = role === 'user';
+  const icon = PM_DESIGN_ICONS[index % PM_DESIGN_ICONS.length];
 
   if (isUser) {
     return (
@@ -42,7 +46,7 @@ export function Message({ role, content }: MessageProps) {
 
   return (
     <div className="msg-ai">
-      <img src="/axel-avatar.png" alt="Axel Klecki" className="avatar-gradient-msg" style={{ objectFit: 'cover', borderRadius: 'var(--radius-sm)' }} />
+      <div className="avatar-gradient avatar-gradient-msg">{icon}</div>
       <div>
         <div className="msg-ai-name">Axel Klecki</div>
         <div className="msg-ai-bubble">

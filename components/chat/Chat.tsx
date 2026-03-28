@@ -149,6 +149,7 @@ export function Chat({ initialQuestion }: ChatProps = {} as ChatProps) {
               <Message
                 role={message.role as 'user' | 'assistant'}
                 content={getMessageContent(message)}
+                index={index}
               />
             </div>
           );
