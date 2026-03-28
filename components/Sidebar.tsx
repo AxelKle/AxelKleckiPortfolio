@@ -31,7 +31,7 @@ function SidebarProjectTitle({ title }: { title: string }) {
 
 export function Sidebar() {
   const [projects, setProjects] = useState<ProjectItem[]>([]);
-  const { chatHistory, enterChatView } = useApp();
+  const { chatHistory, enterChatView, goToLanding } = useApp();
   const { openSlug, openProject } = useProject();
   const { t, locale } = useLanguage();
 
@@ -49,9 +49,9 @@ export function Sidebar() {
       <div className="flex-1 flex flex-col overflow-y-auto min-h-0 sidebar-scroll">
         {/* Profile section */}
         <div className="sidebar-profile-section">
-          <Link href="/">
-            <img src="/axel-avatar.png" alt="Axel Klecki" className="avatar-gradient-sidebar" style={{ objectFit: 'cover', borderRadius: '50%', cursor: 'pointer' }} />
-          </Link>
+          <button onClick={goToLanding} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}>
+            <img src="/axel-avatar.png" alt="Axel Klecki" className="avatar-gradient-sidebar" style={{ objectFit: 'cover', borderRadius: '50%', display: 'block' }} />
+          </button>
           <div className="sidebar-profile-info">
             <span className="sidebar-profile-name">{t.name}</span>
             <span className="sidebar-profile-role">{t.role}</span>
