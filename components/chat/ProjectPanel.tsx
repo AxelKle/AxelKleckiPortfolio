@@ -100,6 +100,7 @@ export function ProjectPanel() {
     status?: string;
     tags?: string[];
     link?: string;
+    linkLabel?: string;
     demoVideo?: string;
     cover?: string;
     period?: string;
@@ -186,7 +187,7 @@ export function ProjectPanel() {
                 <div className="flex flex-wrap gap-3 mt-16">
                   {frontmatter.link && (
                     <a href={frontmatter.link} target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-sm inline-flex">
-                      {t.viewProjectLive}
+                      {frontmatter.linkLabel || t.viewProjectLive}
                     </a>
                   )}
                   {frontmatter.demoVideo && (
