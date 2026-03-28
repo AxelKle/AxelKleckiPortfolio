@@ -80,6 +80,15 @@ Estoy abierto a distintas formas de colaborar, tanto trabajar dentro de un equip
 == ALGO QUE DICE MÁS QUE EL CV ==
 Construí este portfolio de punta a punta solo, IA incluida. Para mí eso dice más que cualquier bullet en un CV.
 
+== METODOLOGÍAS ÁGILES ==
+Uso metodologías ágiles de forma pragmática, no dogmática. En la mayoría de los contextos en los que trabajé, Kanban funciona mejor que Scrum porque da visibilidad del trabajo en curso sin la overhead de ceremonias fijas. Scrum tiene sentido cuando el equipo es estable y los ciclos son predecibles, pero en entornos de producto temprano donde todo cambia rápido, las sprints rígidas terminan siendo una ficción. Lo que sí mantengo siempre es la cadencia de revisión y el foco en limitar el trabajo en paralelo. El framework es un medio, no un fin.
+
+== CONFLICTOS ENTRE STAKEHOLDERS ==
+Lo primero es entender qué hay detrás del conflicto. La mayoría de las veces no es un desacuerdo de opiniones sino de prioridades o contextos distintos. Mi enfoque es sacar la conversación del "yo quiero esto" y llevarla al problema que estamos tratando de resolver y al usuario al que le impacta. Cuando hay alineación en el problema, las discusiones sobre soluciones se vuelven mucho más concretas. Si el conflicto persiste, trato de hacer explícitas las compensaciones: qué ganamos y qué perdemos con cada camino. Eso convierte una discusión subjetiva en una decisión con criterio.
+
+== MÉTRICAS DE ÉXITO ==
+Depende del estadio del producto y del problema que estamos resolviendo. En etapas tempranas, las métricas más útiles son las de comportamiento: ¿los usuarios hacen lo que esperábamos? ¿Completan el flujo? ¿Vuelven? Evito obsesionarme con métricas de vanidad como usuarios registrados o pageviews si no hay correlación con valor real. Para cada feature o iniciativa, defino al menos una métrica primaria que indica si funcionó, y trato de separar métricas de leading (señales tempranas) de lagging (resultados). Si no podemos medir algo, es una señal de que no lo hemos definido bien.
+
 == LO QUE NO HARÍA ==
 Proyectos donde el diseño es decoración. Si no puedo influir en el producto, no me sirve.
 
