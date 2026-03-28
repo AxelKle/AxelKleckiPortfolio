@@ -133,7 +133,7 @@ async function buildCV() {
       start: { x: ML, y: ruleY }, end: { x: ML + CW, y: ruleY },
       thickness: 0.4, color: C.rule,
     });
-    return ruleY - 14;  // more air between rule and first content line
+    return ruleY - 12;
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -168,14 +168,21 @@ async function buildCV() {
 
   y = section("Summary", y);
   const sumH = paraAt(
-    "Product Manager and Product Designer building digital products across fintech, marketplaces, and Web3. " +
-    "Combines product strategy with end-to-end UX/UI design — from discovery and definition to execution and delivery. " +
-    "Experienced working with engineers, founders, and stakeholders to ship scalable, user-centered products. " +
-    "Integrating AI-assisted workflows (Cursor, Claude) for rapid prototyping and product iteration.",
+    "I'm a Product Manager and Product Designer focused on building digital products that balance " +
+    "user experience, business strategy, and technical feasibility. " +
+    "My background combines product strategy and UX/UI design, allowing me to work end-to-end " +
+    "from discovery and product definition to design execution and delivery. " +
+    "I've worked across fintech, marketplaces, and emerging technologies, collaborating with " +
+    "cross-functional teams to turn complex ideas into intuitive and scalable products. " +
+    "Recently, I've been integrating AI-assisted development workflows into product building, " +
+    "using tools such as Cursor and Claude AI to rapidly prototype features, explore technical " +
+    "possibilities, and accelerate product iteration. " +
+    "With a strong design foundation, I bring a user-first mindset into product decisions " +
+    "while ensuring alignment with business goals and technical constraints.",
     ML, y,
-    { font: reg, size: 8.5, color: C.mid, lineH: 14 }
+    { font: reg, size: 8, color: C.mid, lineH: 12 }
   );
-  y -= sumH + 20;
+  y -= sumH + 16;
 
   // ═══════════════════════════════════════════════════════════════════════════
   // EXPERIENCE
@@ -252,10 +259,10 @@ async function buildCV() {
         y -= 12.5;
       }
     }
-    y -= 10;
+    y -= 9;
   }
 
-  y -= 8;
+  y -= 6;
 
   // ═══════════════════════════════════════════════════════════════════════════
   // EDUCATION
@@ -280,12 +287,12 @@ async function buildCV() {
     txt(e.inst, ML, y, { font: bold, size: 9, color: C.dark });
     const yw = reg.widthOfTextAtSize(e.years, 7.5);
     txt(e.years, ML + CW - yw, y, { font: reg, size: 7.5, color: C.lgray });
-    y -= 13;
+    y -= 12;
     txt(e.deg, ML, y, { font: reg, size: 8.5, color: C.gray });
-    y -= 16;
+    y -= 14;
   }
 
-  y -= 8;
+  y -= 5;
 
   // ═══════════════════════════════════════════════════════════════════════════
   // SKILLS — two columns
@@ -298,14 +305,14 @@ async function buildCV() {
     "UX/UI Design",                "Stakeholder Management",
     "Product Strategy",            "Roadmapping",
     "User Research",               "AI-Assisted Dev (Cursor, Claude)",
-    "Wireframing & Prototyping",   "React.js",
+    "Wireframing & Prototyping",   "Vibecoding",
     "Web3 / DeFi / Fintech",       "User-Centered Design",
   ];
 
   const half    = Math.ceil(skills.length / 2);
   const col1    = skills.slice(0, half);
   const col2    = skills.slice(half);
-  const skRowH  = 14;
+  const skRowH  = 13.5;
 
   for (let i = 0; i < Math.max(col1.length, col2.length); i++) {
     if (col1[i]) {
