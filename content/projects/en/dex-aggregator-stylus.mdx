@@ -11,34 +11,34 @@ cover: /images/projects/dex-aggregator-stylus/step1.png
 
 ## Overview
 
-I was the PM, designer, and co-builder of this DEX aggregation Mini-App deployed on Arbitrum Mainnet. The core smart contract is written in Stylus (AssemblyScript), making it one of the first real production DeFi cases on Stylus. The goal was to show Stylus can handle complex DeFi aggregation logic—multiple external calls, optimized routing, gas efficiency—in real production conditions, not synthetic benchmarks. For the frontend I used Cursor for vibecoding to ship faster.
+I was the PM, designer, and co-builder of this DEX aggregation Mini-App deployed on Arbitrum Mainnet. The core smart contract is written in Stylus (AssemblyScript), making it one of the first real production DeFi cases on Stylus. The goal was to show Stylus can handle complex DeFi aggregation logic, with multiple external calls, optimized routing and gas efficiency, in real production conditions rather than synthetic benchmarks. For the frontend I used Cursor for vibecoding to ship faster.
 
 ## Problem
 
-Most mobile wallets and Mini-Apps are centralized and offer limited access to low- or mid-liquidity tokens. Someone trying to buy an unlisted token from USDC has few simple options. At the same time, the Arbitrum ecosystem lacked real DeFi use cases that validated Stylus against Solidity in production—only isolated benchmarks.
+Most mobile wallets and Mini-Apps are centralized and offer limited access to low- or mid-liquidity tokens. Someone trying to buy an unlisted token from USDC has few simple options. At the same time, the Arbitrum ecosystem lacked real DeFi use cases that validated Stylus against Solidity in production, only isolated benchmarks.
 
 ## Process
 
-### Step 1 — Product definition & scope
+### Step 1: Product definition & scope
 I defined the full Mini-App scope: a Stylus smart contract acting as DEX aggregator/router, taking input token, output token, and amount, executing the best route across multiple Arbitrum DEXs, and charging a USDC fee before the swap. The UI had to be minimal, fast, and built for mobile and embedded Mini-App contexts.
 
 ![Product definition and scope](/images/projects/dex-aggregator-stylus/step1.png)
 
-### Step 2 — UX design
-I designed the full interface: token in/out selection, swap visualization, chart for the selected token, and a portfolio view with user assets and estimated value. The principle was clarity and low friction—users should swap in seconds without needing to understand the aggregator under the hood.
+### Step 2: UX design
+I designed the full interface: token in/out selection, swap visualization, chart for the selected token, and a portfolio view with user assets and estimated value. The principle was clarity and low friction: users should swap in seconds without needing to understand the aggregator under the hood.
 
 ![Mini-App UX design](/images/projects/dex-aggregator-stylus/step2.png)
 
-### Step 3 — UI design & Cursor vibecoding
+### Step 3: UI design & Cursor vibecoding
 I designed the UI and built it directly in Cursor with AI-assisted development. This was one of the first projects where I used vibecoding heavily to compress the gap between design and working frontend. I could iterate on the UI in hours instead of days while staying close to the smart contract and tuning the interface live against on-chain behavior.
 
 ![UI design and development with Cursor](/images/projects/dex-aggregator-stylus/step3.png)
 
-### Step 4 — Arbitrum Mainnet deploy & documentation
-I coordinated Stylus contract deployment on Arbitrum Mainnet, the open-source repo with contracts, frontend, and deploy scripts, the demo video and technical walkthrough, and the blog post on Arbitrum’s official blog documenting what we built, how we approached it, and key learnings on Stylus vs Solidity.
+### Step 4: Arbitrum Mainnet deploy & documentation
+I coordinated Stylus contract deployment on Arbitrum Mainnet, the open-source repo with contracts, frontend, and deploy scripts, the demo video and technical walkthrough, and the blog post on Arbitrum's official blog documenting what we built, how we approached it, and key learnings on Stylus vs Solidity.
 
 ![Deploy and technical documentation](/images/projects/dex-aggregator-stylus/step4.png)
 
 ## Result
 
-A working Mini-App on Arbitrum Mainnet, open source, with a blog post on Arbitrum’s official blog. The project validated Stylus for real DeFi workloads with multiple external calls and served as a proof of concept to encourage Stylus adoption among DEX aggregators and existing DeFi protocols.
+A working Mini-App on Arbitrum Mainnet, open source, with a blog post on Arbitrum's official blog. The project validated Stylus for real DeFi workloads with multiple external calls and served as a proof of concept to encourage Stylus adoption among DEX aggregators and existing DeFi protocols.

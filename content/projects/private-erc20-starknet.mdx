@@ -12,30 +12,30 @@ cover: /images/projects/private-erc20-starknet/cover.png
 
 ## Overview
 
-Fui el UX/UI Designer del proyecto Private ERC20 on Starknet, una iniciativa de WakeUp Labs para crear un estándar de tokens privados en Starknet que sea compatible con requisitos regulatorios. El producto permite transferir fondos de forma confidencial entre cuentas — ocultando balances, no direcciones — mientras el emisor del token mantiene el control de las viewing keys para cumplimiento regulatorio.
+Fui el UX/UI Designer del proyecto Private ERC20 on Starknet, una iniciativa de WakeUp Labs para crear un estándar de tokens privados en Starknet compatible con requisitos regulatorios. El producto permite transferir fondos de forma confidencial entre cuentas, ocultando balances pero no direcciones, mientras el emisor del token mantiene el control de las viewing keys para cumplimiento regulatorio.
 
 ## Problem
 
-Usar tokens como medio de pago en blockchain expone públicamente los balances de todos los usuarios. Esto genera fricciones reales: pagos de salarios visibles, compras de activos vinculadas a la identidad, y falta de privacidad financiera básica. El desafío de diseño era hacer que un sistema criptográficamente complejo — con ZK proofs, viewing keys y notas privadas — fuera completamente transparente e intuitivo para el usuario final.
+Usar tokens como medio de pago en blockchain expone públicamente los balances de todos los usuarios. Esto genera fricciones reales: pagos de salarios visibles, compras de activos vinculadas a la identidad, y falta de privacidad financiera básica. El desafío de diseño era hacer que un sistema criptográficamente complejo, con ZK proofs, viewing keys y notas privadas, fuera completamente transparente e intuitivo para el usuario final.
 
 ## Process
 
-### Step 1 — Entendimiento del sistema técnico
+### Step 1: Entendimiento del sistema técnico
 Antes de diseñar una sola pantalla me sumergí en entender el modelo técnico: cómo funcionan las notas privadas, qué son las viewing keys, cuándo el usuario necesita generar un ZK proof y cuál es el rol del contrato owner en el flujo regulatorio. Ese entendimiento fue la base para todas las decisiones de UX.
 
 ![Entendimiento del sistema técnico](/images/projects/private-erc20-starknet/step1.png)
 
-### Step 2 — UX Design & Flujos de usuario
-Diseñé los flujos principales: visualización de balance privado en la wallet, envío confidencial de tokens, generación de ZK proof para transferencias, y la experiencia del contract owner para gestión de viewing keys. El foco estuvo en hacer que la privacidad fuera el comportamiento por defecto — sin fricción adicional para el usuario.
+### Step 2: UX Design & Flujos de usuario
+Diseñé los flujos principales: visualización de balance privado en la wallet, envío confidencial de tokens, generación de ZK proof para transferencias, y la experiencia del contract owner para gestión de viewing keys. El foco estuvo en hacer que la privacidad fuera el comportamiento por defecto, sin fricción adicional para el usuario.
 
 ![UX design y flujos](/images/projects/private-erc20-starknet/step2.png)
 
-### Step 3 — UI Design en Figma
+### Step 3: UI Design en Figma
 Diseñé la interfaz visual completa: dashboard de balance privado, pantallas de transferencia confidencial, estados de confirmación de ZK proof, y la integración con wallets de Starknet. La estética tenía que transmitir seguridad y confianza sin sacrificar claridad.
 
 ![UI Design en Figma](/images/projects/private-erc20-starknet/step3.png)
 
-### Step 4 — Prototipo y demo
+### Step 4: Prototipo y demo
 Desarrollé el prototipo navegable que fue presentado públicamente como demo del proyecto, mostrando el flujo completo de transferencia privada de tokens en Starknet.
 
 ![Demo del prototipo](/images/projects/private-erc20-starknet/step4.png)
