@@ -1947,18 +1947,7 @@ body {
   pointer-events: none;
 }
 
-/* Bottom fade: hero fades to white */
-.project-detail-hero::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 120px;
-  background: linear-gradient(to bottom, transparent, #ffffff);
-  z-index: 10;
-  pointer-events: none;
-}
+/* No bottom fade — clean linear cut between hero and content */
 
 /* Ambient orbs inside hero */
 .project-detail-hero-orb-1,
