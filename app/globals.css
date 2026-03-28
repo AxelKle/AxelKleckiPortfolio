@@ -792,25 +792,11 @@ body {
 .project-modal-body-scroll {
   scroll-padding-bottom: 2rem;
   padding-bottom: max(2rem, env(safe-area-inset-bottom, 0px));
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.12) transparent;
+  scrollbar-width: none;
 }
 
 .project-modal-body-scroll::-webkit-scrollbar {
-  width: 4px;
-}
-
-.project-modal-body-scroll::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.project-modal-body-scroll::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.12);
-  border-radius: 4px;
-}
-
-.project-modal-body-scroll::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.22);
+  display: none;
 }
 
 .project-modal-content-px {
