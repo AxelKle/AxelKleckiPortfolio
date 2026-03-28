@@ -183,7 +183,7 @@ export function ProjectPanel() {
               </div>
               {/* Action buttons */}
               {(frontmatter.link || frontmatter.demoVideo) && (
-                <div className="flex flex-wrap gap-3 mt-10">
+                <div className="flex flex-wrap gap-3 mt-16">
                   {frontmatter.link && (
                     <a href={frontmatter.link} target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-sm inline-flex">
                       {t.viewProjectLive}
