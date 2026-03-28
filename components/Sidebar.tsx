@@ -54,10 +54,6 @@ export function Sidebar() {
             <span className="sidebar-profile-name">{t.name}</span>
             <span className="sidebar-profile-role">{t.role}</span>
           </div>
-          <span className="avail-badge avail-badge-sidebar">
-            <span className="avail-badge-dot" />
-            {t.available}
-          </span>
         </div>
         <div className="sidebar-divider" />
 
