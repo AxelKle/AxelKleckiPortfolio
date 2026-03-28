@@ -165,16 +165,13 @@ async function buildCV() {
 
   const HEADER_H = 88;
 
-  // 1. Gradient base
-  drawGradientRect(page, 0, PAGE_H - HEADER_H, PAGE_W, HEADER_H, C.purple, C.pink);
+  // 1. Gradient base — lighter/more vibrant, no dark overlay
+  drawGradientRect(page, 0, PAGE_H - HEADER_H, PAGE_W, HEADER_H,
+    rgb(130/255, 100/255, 255/255),   // lighter purple
+    rgb(210/255, 110/255, 250/255),   // lighter pink
+  );
 
-  // 2. Semi-transparent dark overlay so grid reads cleaner (opacity 0.18)
-  page.drawRectangle({
-    x: 0, y: PAGE_H - HEADER_H, width: PAGE_W, height: HEADER_H,
-    color: rgb(0.06, 0.04, 0.12), opacity: 0.18,
-  });
-
-  // 3. Grid pattern — same vibe as landing page crosshatch
+  // 2. Grid pattern — same vibe as landing page crosshatch
   drawGrid(page, 0, PAGE_H - HEADER_H, PAGE_W, HEADER_H, 22, rgb(1,1,1), 0.12);
 
   // Name — with top breathing room
@@ -384,9 +381,6 @@ async function buildCV() {
   txt(certText, ML + CW - certW, y, { font: reg, size: 8.5, color: C.gray });
 
   y -= 14;
-
-  // ── Gradient footer bar ──────────────────────────────────────────────────
-  drawGradientRect(page, ML, MB, CW, 2, C.purple, C.pink);
 
   // ─── Diagnostics ──────────────────────────────────────────────────────────
   const pages = doc.getPages().length;
