@@ -42,7 +42,7 @@ export function Message({ role, content }: MessageProps) {
 
   return (
     <div className="msg-ai">
-      <div className="avatar-gradient avatar-gradient-msg">AK</div>
+      <img src="/axel-avatar.png" alt="Axel Klecki" className="avatar-gradient-msg" style={{ objectFit: 'cover', borderRadius: 'var(--radius-sm)' }} />
       <div>
         <div className="msg-ai-name">Axel Klecki</div>
         <div className="msg-ai-bubble">
