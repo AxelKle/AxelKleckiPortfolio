@@ -97,7 +97,7 @@ export function Sidebar() {
             <p className="sidebar-no-history">{t.noHistory}</p>
           ) : (
             <ul className="sidebar-history-list">
-              {chatHistory.map((q, i) => (
+              {[...chatHistory].reverse().map((q, i) => (
                 <li key={`${i}-${q.slice(0, 20)}`} className="sidebar-history-item">
                   <button
                     type="button"
