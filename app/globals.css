@@ -769,10 +769,19 @@ body {
   color: #fff;
 }
 
+/* Wrapper that lets the scroll hint overflow the card's clipping */
+.project-modal-card-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+}
+
 .project-modal-card {
   pointer-events: auto;
   width: 100%;
-  max-width: 900px;
   max-height: min(90dvh, calc(100vh - 32px));
   display: flex;
   flex-direction: column;
@@ -2006,7 +2015,7 @@ body {
 /* Scroll hint arrow */
 .project-detail-hero-scroll-hint {
   position: absolute;
-  bottom: 20px;
+  bottom: -16px;
   left: 50%;
   z-index: 15;
   display: flex;
@@ -2015,8 +2024,9 @@ body {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #6b4eff, #c254f5);
-  box-shadow: 0 2px 12px rgba(107, 78, 255, 0.35);
+  background: linear-gradient(135deg, rgba(107,78,255,0.82), rgba(194,84,245,0.82));
+  box-shadow: 0 2px 12px rgba(107, 78, 255, 0.25);
+  backdrop-filter: blur(4px);
   animation: hero-scroll-bounce 1.4s ease-in-out infinite;
   pointer-events: none;
 }
