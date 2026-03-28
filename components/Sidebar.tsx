@@ -49,7 +49,9 @@ export function Sidebar() {
       <div className="flex-1 flex flex-col overflow-y-auto min-h-0 sidebar-scroll">
         {/* Profile section */}
         <div className="sidebar-profile-section">
-          <img src="/axel-avatar.png" alt="Axel Klecki" className="avatar-gradient-sidebar" style={{ objectFit: 'cover', borderRadius: '50%' }} />
+          <Link href="/">
+            <img src="/axel-avatar.png" alt="Axel Klecki" className="avatar-gradient-sidebar" style={{ objectFit: 'cover', borderRadius: '50%', cursor: 'pointer' }} />
+          </Link>
           <div className="sidebar-profile-info">
             <span className="sidebar-profile-name">{t.name}</span>
             <span className="sidebar-profile-role">{t.role}</span>
