@@ -61,7 +61,8 @@ export function Message({ role, content, index = 0 }: MessageProps) {
                   type="button"
                   onClick={() => openProject(slug)}
                   title={name}
-                  className="inline-flex items-center gap-0.5 text-[11px] font-medium text-g1 hover:text-g2 px-2 py-1 rounded border border-[var(--line)] hover:border-g1/40 transition-colors bg-transparent cursor-pointer"
+                  className="inline-flex items-center text-[11px] font-medium text-g1 hover:text-g2 rounded-full border border-[var(--line)] hover:border-g1/40 transition-colors bg-transparent cursor-pointer"
+                  style={{ padding: '6px 14px', gap: '4px' }}
                 >
                   {`${t.viewProjectNamed} ${name} →`}
                 </button>
