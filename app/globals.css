@@ -370,8 +370,8 @@ body {
 }
 
 .avatar-gradient-sidebar {
-  width: 56px;
-  height: 56px;
+  width: 72px;
+  height: 72px;
   font-size: 16px;
   margin-bottom: var(--space-md);
 }
@@ -416,19 +416,30 @@ body {
   align-items: center;
   gap: 8px;
   width: 100%;
-  padding: 5px 0;
+  padding: 6px 8px;
+  margin: 0 -8px;
+  width: calc(100% + 16px);
   font-size: 12.5px;
   color: var(--color-text-secondary);
   background: none;
   border: none;
+  border-radius: 6px;
   cursor: pointer;
   text-align: left;
   font-family: inherit;
-  transition: color 0.18s ease;
+  transition: color 0.18s ease, background 0.18s ease;
+}
+
+.sidebar-project-item:hover {
+  background: rgba(107, 78, 255, 0.06);
 }
 
 .sidebar-project-item:hover .sidebar-project-title {
   color: var(--color-text-primary);
+}
+
+.sidebar-project-item:hover .sidebar-project-dot {
+  background: #7F77DD;
 }
 
 .sidebar-project-item-active .sidebar-project-dot {
@@ -545,7 +556,7 @@ body {
   margin: 0 0 var(--space-md);
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .sidebar-history-item {
@@ -556,10 +567,10 @@ body {
 
 .sidebar-history-button {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 8px;
   width: 100%;
-  padding: 9px 11px;
+  padding: 6px 10px;
   background: white;
   border: 1px solid var(--line);
   border-radius: 8px;

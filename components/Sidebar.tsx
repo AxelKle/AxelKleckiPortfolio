@@ -104,7 +104,7 @@ export function Sidebar() {
                     onClick={() => enterChatView(q)}
                     className="sidebar-history-button"
                   >
-                    <span className="sidebar-history-text line-clamp-2">{q}</span>
+                    <span className="sidebar-history-text truncate">{q}</span>
                   </button>
                 </li>
               ))}
