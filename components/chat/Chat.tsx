@@ -21,6 +21,8 @@ export function Chat({ initialQuestion }: ChatProps = {} as ChatProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const aiResponseStartRef = useRef<HTMLDivElement>(null);
   const prevStatusRef = useRef<string>('ready');
+  const prevLocaleRef = useRef<string | null>(null);
+  const messagesRef = useRef<typeof messages>([]);
   const { addToChatHistory, consumePendingQuestion } = useApp();
   const { t, locale } = useLanguage();
 
@@ -37,7 +39,7 @@ export function Chat({ initialQuestion }: ChatProps = {} as ChatProps) {
     []
   );
 
-  const { messages, sendMessage, status, error, regenerate } = useChat({
+  const { messages, setMessages, sendMessage, status, error, regenerate } = useChat({
     transport,
     resume: false, // Evita bug activeResponse undefined (AI SDK #8531, #11024)
   });
@@ -73,6 +75,51 @@ export function Chat({ initialQuestion }: ChatProps = {} as ChatProps) {
     }
     // Durante streaming o cuando termina: no mover el scroll automáticamente
   }, [messages, status]);
+
+  // Mantener mensagesRef actualizado
+  messagesRef.current = messages;
+
+  // Auto-traducir mensajes cuando cambia el idioma
+  useEffect(() => {
+    if (prevLocaleRef.current === null) {
+      prevLocaleRef.current = locale;
+      return;
+    }
+    if (prevLocaleRef.current === locale) return;
+    prevLocaleRef.current = locale;
+
+    const currentMessages = messagesRef.current;
+    if (currentMessages.length === 0) return;
+
+    const getText = (msg: (typeof currentMessages)[0]) => {
+      if (msg.parts) {
+        return msg.parts
+          .filter((p): p is { type: string; text: string } => p.type === 'text' && 'text' in p)
+          .map((p) => p.text)
+          .join('');
+      }
+      return '';
+    };
+
+    const texts = currentMessages.map(getText);
+
+    fetch('/api/translate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ texts, locale }),
+    })
+      .then((r) => r.json())
+      .then(({ texts: translated }: { texts: string[] }) => {
+        const updated = currentMessages.map((msg, i) => ({
+          ...msg,
+          parts: msg.parts?.map((part) =>
+            part.type === 'text' ? { ...part, text: translated[i] } : part
+          ) ?? [],
+        }));
+        setMessages(updated);
+      })
+      .catch(console.error);
+  }, [locale, setMessages]);
 
   const handleSuggestionClick = (question: string) => {
     if (status === 'ready') {
