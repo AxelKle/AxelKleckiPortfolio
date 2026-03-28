@@ -825,7 +825,7 @@ body {
 
 /* Projects page */
 .projects-page-main {
-  padding-top: 112px;
+  padding-top: 8px;
   padding-bottom: 48px;
   background-image:
     repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0,0,0,0.010) 39px, rgba(0,0,0,0.010) 40px),

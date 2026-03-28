@@ -70,9 +70,8 @@ function ProjectsPageContent() {
         <div className="landing-orb-3" />
       </div>
 
-      {/* Fixed top bar — same container alignment as cards */}
-      <div className="fixed top-0 left-0 right-0 z-50" style={{ paddingTop: '40px', paddingBottom: '16px' }}>
-        <div className="container flex items-center justify-between">
+      {/* Top bar — flows with content */}
+      <div className="relative z-10 container flex items-center justify-between" style={{ paddingTop: '40px', paddingBottom: '20px' }}>
           <div className="flex items-center gap-3">
             <button
               type="button"
@@ -103,7 +102,6 @@ function ProjectsPageContent() {
               {t.email}
             </a>
           </div>
-        </div>
       </div>
 
       <main className="flex-1 relative container projects-page-main">
