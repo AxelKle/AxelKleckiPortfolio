@@ -2,6 +2,7 @@
 
 import { getCompaniesMentionedInText } from '@/lib/companyLinks';
 import { useProject } from '@/context/ProjectContext';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface MessageProps {
   role: 'user' | 'assistant';
@@ -22,6 +23,7 @@ function renderTextWithBold(text: string) {
 
 export function Message({ role, content }: MessageProps) {
   const { openProject } = useProject();
+  const { t } = useLanguage();
   const isUser = role === 'user';
 
   if (isUser) {
@@ -57,7 +59,7 @@ export function Message({ role, content }: MessageProps) {
                   title={name}
                   className="inline-flex items-center gap-0.5 text-[11px] font-medium text-g1 hover:text-g2 px-2 py-1 rounded border border-[var(--line)] hover:border-g1/40 transition-colors bg-transparent cursor-pointer"
                 >
-                  {companies.length > 1 ? `Ver ${name} →` : 'Ver proyecto →'}
+                  {companies.length > 1 ? `${t.viewProjectNamed} ${name} →` : t.viewProject}
                 </button>
               ))}
             </div>

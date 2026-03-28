@@ -19,6 +19,8 @@ export function Chat({ initialQuestion }: ChatProps = {} as ChatProps) {
   const initialSentRef = useRef(false);
   const autoSendBlockRef = useRef(false); // Evita doble envío (bug AI SDK #11024)
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const aiResponseStartRef = useRef<HTMLDivElement>(null);
+  const prevStatusRef = useRef<string>('ready');
   const { addToChatHistory, consumePendingQuestion } = useApp();
   const { t, locale } = useLanguage();
 
@@ -35,7 +37,6 @@ export function Chat({ initialQuestion }: ChatProps = {} as ChatProps) {
     []
   );
 
-  const sendOptions = { body: { locale } };
   const { messages, sendMessage, status, error, regenerate } = useChat({
     transport,
     resume: false, // Evita bug activeResponse undefined (AI SDK #8531, #11024)
@@ -47,27 +48,37 @@ export function Chat({ initialQuestion }: ChatProps = {} as ChatProps) {
     if (pending) {
       autoSendBlockRef.current = true;
       addToChatHistory(pending);
-      sendMessage({ text: pending }, sendOptions);
+      sendMessage({ text: pending });
       return;
     }
     if (initialQuestion && !initialSentRef.current && messages.length === 0) {
       initialSentRef.current = true;
       autoSendBlockRef.current = true;
       addToChatHistory(initialQuestion);
-      sendMessage({ text: initialQuestion }, sendOptions);
+      sendMessage({ text: initialQuestion });
     }
   }, [status, consumePendingQuestion, addToChatHistory, sendMessage, initialQuestion, messages.length]);
 
-  // Auto-scroll al último mensaje cuando llegan nuevos mensajes o durante streaming
+  // Scroll inteligente: al enviar → muestra el indicador; al arrancar la respuesta → muestra el inicio
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const prev = prevStatusRef.current;
+    prevStatusRef.current = status;
+
+    if (status === 'submitted') {
+      // Usuario acaba de enviar → scrollear al fondo para mostrar el typing indicator
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    } else if (status === 'streaming' && prev === 'submitted') {
+      // La IA empezó a responder → scrollear al inicio de la respuesta y quedarse ahí
+      aiResponseStartRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    // Durante streaming o cuando termina: no mover el scroll automáticamente
   }, [messages, status]);
 
   const handleSubmit = () => {
     if (input.trim() && status === 'ready') {
       const text = input.trim();
       addToChatHistory(text);
-      sendMessage({ text }, sendOptions);
+      sendMessage({ text });
       setInput('');
     }
   };
@@ -75,7 +86,7 @@ export function Chat({ initialQuestion }: ChatProps = {} as ChatProps) {
   const handleSuggestionClick = (question: string) => {
     if (status === 'ready') {
       addToChatHistory(question);
-      sendMessage({ text: question }, sendOptions);
+      sendMessage({ text: question });
     }
   };
 
@@ -131,13 +142,17 @@ export function Chat({ initialQuestion }: ChatProps = {} as ChatProps) {
   return (
     <div className="flex flex-col h-full min-h-0 flex-1">
       <div className="chat-messages flex-1 min-h-0 overflow-y-auto">
-        {messages.map((message, index) => (
-          <Message
-            key={`${message.id}-${index}`}
-            role={message.role as 'user' | 'assistant'}
-            content={getMessageContent(message)}
-          />
-        ))}
+        {messages.map((message, index) => {
+          const isLastAssistant = message.role === 'assistant' && index === messages.length - 1;
+          return (
+            <div key={`${message.id}-${index}`} ref={isLastAssistant ? aiResponseStartRef : undefined}>
+              <Message
+                role={message.role as 'user' | 'assistant'}
+                content={getMessageContent(message)}
+              />
+            </div>
+          );
+        })}
 
         {(status === 'submitted' || status === 'streaming') && <TypingIndicator />}
 

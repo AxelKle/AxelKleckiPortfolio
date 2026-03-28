@@ -2,19 +2,29 @@
 
 import { Chat } from './Chat';
 import { ProjectModalShell } from './ProjectModalShell';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface ChatAreaWithPanelProps {
   initialQuestion?: string;
 }
 
 export function ChatAreaWithPanel({ initialQuestion }: ChatAreaWithPanelProps) {
+  const { locale } = useLanguage();
+
   return (
     <main
       className="chat-area relative overflow-hidden bg-[#F7F5F2]"
       style={{ display: 'flex', flexDirection: 'row', flex: 1, minHeight: 0 }}
     >
-      <div className="min-w-0 min-h-0 flex flex-col overflow-hidden flex-1">
-        <Chat initialQuestion={initialQuestion} />
+      {/* Ambient orbs — mismo efecto que la landing */}
+      <div className="landing-bg-fx">
+        <div className="landing-orb landing-orb-1" />
+        <div className="landing-orb landing-orb-2" />
+        <div className="landing-orb landing-orb-3" />
+      </div>
+
+      <div className="relative z-10 min-w-0 min-h-0 flex flex-col overflow-hidden flex-1">
+        <Chat key={locale} initialQuestion={initialQuestion} />
       </div>
       <ProjectModalShell />
     </main>
