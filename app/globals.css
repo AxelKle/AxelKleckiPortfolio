@@ -1920,6 +1920,26 @@ body {
   display: flex;
   align-items: flex-end;
   flex-shrink: 0;
+  /* Dark fallback for any light areas in cover images */
+  background: #0f0f1a;
+}
+
+/* Top fade: darkens any light/white areas in the cover image */
+.project-detail-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.45) 0%,
+    rgba(0, 0, 0, 0.1) 40%,
+    transparent 100%
+  );
+  z-index: 3;
+  pointer-events: none;
 }
 
 /* Bottom fade: hero fades to white */

@@ -135,6 +135,7 @@ export function ProjectPanel() {
                   alt={frontmatter.title || 'Cover'}
                   fill
                   className="object-cover object-top"
+                  style={{ zIndex: 2 }}
                   sizes="(max-width: 900px) 100vw, 900px"
                   priority
                 />
