@@ -54,7 +54,7 @@ export function Message({ role, content, index = 0 }: MessageProps) {
             {renderTextWithBold(content)}
           </div>
           {companies.length > 0 && (
-            <div className="mt-8 pt-4 border-t border-[var(--line)] flex flex-wrap gap-2">
+            <div className="border-t border-[var(--line)] flex flex-wrap gap-2" style={{ marginTop: '40px', paddingTop: '20px' }}>
               {companies.map(({ name, slug }) => (
                 <button
                   key={slug}
