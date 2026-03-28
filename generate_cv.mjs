@@ -156,7 +156,7 @@ async function buildCV() {
       start: { x: ML, y: ruleY }, end: { x: ML + CW, y: ruleY },
       thickness: 0.4, color: C.rule,
     });
-    return ruleY - 12;
+    return ruleY - 13;
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -213,7 +213,7 @@ async function buildCV() {
     ML, y,
     { font: reg, size: 8, color: C.mid, lineH: 12 }
   );
-  y -= sumH + 16;
+  y -= sumH + 22;
 
   // ═══════════════════════════════════════════════════════════════════════════
   // EXPERIENCE
@@ -290,10 +290,10 @@ async function buildCV() {
         y -= 12.5;
       }
     }
-    y -= 9;
+    y -= 12;
   }
 
-  y -= 6;
+  y -= 8;
 
   // ═══════════════════════════════════════════════════════════════════════════
   // EDUCATION
@@ -326,38 +326,33 @@ async function buildCV() {
   y -= 5;
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // SKILLS — two columns
+  // SKILLS — three columns
   // ═══════════════════════════════════════════════════════════════════════════
 
   y = section("Skills", y);
 
-  const skills = [
-    "Product Management",          "Figma",
-    "UX/UI Design",                "Stakeholder Management",
-    "Product Strategy",            "Roadmapping",
-    "User Research",               "AI-Assisted Dev (Cursor, Claude)",
-    "Wireframing & Prototyping",   "Vibecoding",
-    "Web3 / DeFi / Fintech",       "User-Centered Design",
+  // 12 skills → 3 cols × 4 rows, grouped logically
+  const skillCols = [
+    ["Product Management", "UX/UI Design", "Product Strategy", "User Research"],
+    ["Wireframing & Prototyping", "Figma", "Stakeholder Management", "Roadmapping"],
+    ["AI-Assisted Dev (Cursor, Claude)", "Vibecoding", "Web3 / DeFi / Fintech", "User-Centered Design"],
   ];
 
-  const half    = Math.ceil(skills.length / 2);
-  const col1    = skills.slice(0, half);
-  const col2    = skills.slice(half);
-  const skRowH  = 13.5;
+  const skColW = CW / 3;
+  const skRowH = 14;
+  const rows   = Math.max(...skillCols.map(c => c.length));
 
-  for (let i = 0; i < Math.max(col1.length, col2.length); i++) {
-    if (col1[i]) {
-      page.drawText("•", { x: ML, y, font: bold, size: 8.5, color: C.purple });
-      page.drawText(col1[i], { x: ML + 10, y, font: reg, size: 8.5, color: C.dark });
-    }
-    if (col2[i]) {
-      page.drawText("•", { x: ML + CW / 2 + 4, y, font: bold, size: 8.5, color: C.purple });
-      page.drawText(col2[i], { x: ML + CW / 2 + 14, y, font: reg, size: 8.5, color: C.dark });
+  for (let i = 0; i < rows; i++) {
+    for (let c = 0; c < skillCols.length; c++) {
+      if (!skillCols[c][i]) continue;
+      const xBase = ML + c * skColW;
+      page.drawText("•", { x: xBase,      y, font: bold, size: 8.5, color: C.purple });
+      page.drawText(skillCols[c][i], { x: xBase + 10, y, font: reg,  size: 8.5, color: C.dark });
     }
     y -= skRowH;
   }
 
-  y -= 12;
+  y -= 14;
 
   // ═══════════════════════════════════════════════════════════════════════════
   // LANGUAGES & CERTIFICATIONS — combined row
