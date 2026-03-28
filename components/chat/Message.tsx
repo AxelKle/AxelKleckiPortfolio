@@ -4,7 +4,7 @@ import { getCompaniesMentionedInText } from '@/lib/companyLinks';
 import { useProject } from '@/context/ProjectContext';
 import { useLanguage } from '@/context/LanguageContext';
 
-const PM_DESIGN_ICONS = ['◎', '△', '◇', '⬡', '✦', '◈', '⊕', '◆'];
+const PM_DESIGN_ICONS = ['✏️', '🎯', '📐', '💡', '🗺️', '🔍', '📊', '🎨'];
 
 interface MessageProps {
   role: 'user' | 'assistant';
