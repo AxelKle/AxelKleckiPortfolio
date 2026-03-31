@@ -39,6 +39,18 @@ export const translations = {
     email: 'Email',
     downloadCV: 'Descargar CV',
 
+    // Email popover
+    emailCopy: 'Copiar email',
+    emailCopied: '¡Copiado!',
+    emailSendMessage: 'Enviar un mensaje',
+    emailSenderPlaceholder: 'Tu email',
+    emailMessagePlaceholder: 'Tu mensaje…',
+    emailSendBtn: 'Enviar',
+    emailSending: 'Enviando…',
+    emailError: 'Algo salió mal. Intenta de nuevo.',
+    emailSentTitle: '¡Mensaje enviado!',
+    emailSentSubtitle: 'Te respondo a la brevedad.',
+
     // Sidebar
     name: 'Axel Martín Klecki',
     role: 'Product Manager & Design Strategist',
@@ -120,6 +132,18 @@ export const translations = {
     linkedIn: 'LinkedIn',
     email: 'Email',
     downloadCV: 'Download CV',
+
+    // Email popover
+    emailCopy: 'Copy email',
+    emailCopied: 'Copied!',
+    emailSendMessage: 'Send a message',
+    emailSenderPlaceholder: 'Your email',
+    emailMessagePlaceholder: 'Your message…',
+    emailSendBtn: 'Send',
+    emailSending: 'Sending…',
+    emailError: 'Something went wrong. Please try again.',
+    emailSentTitle: 'Message sent!',
+    emailSentSubtitle: "I'll get back to you soon.",
 
     // Sidebar
     name: 'Axel Martín Klecki',

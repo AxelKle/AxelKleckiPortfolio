@@ -65,6 +65,13 @@ export function getCompaniesMentionedInText(content: string): Array<{ name: stri
   return result;
 }
 
+/** Trigger phrases that show a "View all projects" CTA button */
+const VIEW_ALL_PATTERN = /\[VER_PROYECTOS\]/i;
+
+export function shouldShowViewAllProjects(content: string): boolean {
+  return VIEW_ALL_PATTERN.test(content);
+}
+
 /** Question to auto-send when opening /chat?context=<slug> */
 export const SLUG_TO_QUESTION: Record<string, string> = {
   propertize: 'Contame sobre Propertize en WakeUp Labs',

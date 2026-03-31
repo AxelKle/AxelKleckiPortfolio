@@ -1,6 +1,6 @@
 'use client';
 
-import { getCompaniesMentionedInText } from '@/lib/companyLinks';
+import { getCompaniesMentionedInText, shouldShowViewAllProjects } from '@/lib/companyLinks';
 import { useProject } from '@/context/ProjectContext';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -43,6 +43,8 @@ export function Message({ role, content, index = 0 }: MessageProps) {
   }
 
   const companies = getCompaniesMentionedInText(content);
+  const showViewAll = shouldShowViewAllProjects(content);
+  const cleanContent = content.replace(/\[VER_PROYECTOS\]/gi, '').trim();
 
   return (
     <div className="msg-ai">
@@ -51,9 +53,9 @@ export function Message({ role, content, index = 0 }: MessageProps) {
         <div className="msg-ai-name">Axel Klecki</div>
         <div className="msg-ai-bubble">
           <div className="whitespace-pre-wrap break-words">
-            {renderTextWithBold(content)}
+            {renderTextWithBold(cleanContent)}
           </div>
-          {companies.length > 0 && (
+          {(companies.length > 0 || showViewAll) && (
             <div className="border-t border-[var(--line)] flex flex-wrap gap-2" style={{ marginTop: '40px', paddingTop: '20px' }}>
               {companies.map(({ name, slug }) => (
                 <button
@@ -67,6 +69,15 @@ export function Message({ role, content, index = 0 }: MessageProps) {
                   {`${t.viewProjectNamed} ${name} →`}
                 </button>
               ))}
+              {showViewAll && (
+                <a
+                  href="/projects"
+                  className="inline-flex items-center text-[11px] font-medium text-g1 hover:text-g2 rounded-full border border-[var(--line)] hover:border-g1/40 transition-colors bg-transparent cursor-pointer"
+                  style={{ padding: '6px 14px', gap: '4px' }}
+                >
+                  {t.viewAllProjects}
+                </a>
+              )}
             </div>
           )}
         </div>

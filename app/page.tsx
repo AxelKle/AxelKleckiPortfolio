@@ -8,6 +8,7 @@ import { ChatAreaWithPanel } from '@/components/chat/ChatAreaWithPanel';
 import { ProjectModalShell } from '@/components/chat/ProjectModalShell';
 import { LandingPage } from '@/components/landing/LandingPage';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { EmailPopover } from '@/components/EmailPopover';
 import { ArrowLeft } from 'lucide-react';
 
 function PageContent() {
@@ -57,12 +58,7 @@ function PageContent() {
         >
           {t.linkedIn}
         </a>
-        <a
-          href="mailto:axel@example.com"
-          className="pill-nav-btn"
-        >
-          {t.email}
-        </a>
+        <EmailPopover />
       </div>
 
       <div className="chat-layout">
