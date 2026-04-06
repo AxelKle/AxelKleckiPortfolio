@@ -10,6 +10,7 @@ import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { useLanguage } from '@/context/LanguageContext';
 import { useProject } from '@/context/ProjectContext';
 import { ProjectModalShell } from '@/components/chat/ProjectModalShell';
+import { EmailPopover } from '@/components/EmailPopover';
 
 interface ProjectItem {
   slug: string;
@@ -120,12 +121,7 @@ function ProjectsPageContent() {
         >
           {t.linkedIn}
         </a>
-        <a
-          href="mailto:kleckiax@gmail.com"
-          className="projects-mobile-bar-btn"
-        >
-          {t.email}
-        </a>
+        <EmailPopover className="projects-mobile-bar-btn" />
       </div>
 
       <main className="flex-1 relative container projects-page-main">
