@@ -31,6 +31,7 @@ export async function POST(req: Request) {
     const systemPrompt = getSystemPrompt(validLocale);
 
     // Track user message in PostHog via direct API call
+    console.log('POSTHOG_API_KEY present:', !!process.env.POSTHOG_API_KEY);
     if (process.env.POSTHOG_API_KEY) {
       const lastUserMsg = [...messages].reverse().find((m: any) => m.role === 'user');
       const userText = lastUserMsg
