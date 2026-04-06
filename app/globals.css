@@ -2680,13 +2680,13 @@ body {
     padding-bottom: 80px;
   }
 
-  /* Email popover: open upward when triggered from bottom bar */
+  /* Email popover: open upward and to the left when triggered from bottom bar */
   .projects-mobile-bar .email-popover {
     top: auto;
     bottom: calc(100% + 8px);
-    right: auto;
-    left: 50%;
-    transform: translateX(-50%);
+    right: 0;
+    left: auto;
+    transform: none;
   }
 }
 
