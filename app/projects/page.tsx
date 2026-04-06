@@ -73,10 +73,9 @@ function ProjectsPageContent() {
       {/* Top bar */}
       <div className="relative z-10 container flex items-center justify-between" style={{ paddingTop: '40px', paddingBottom: '20px' }}>
         <div className="flex items-center gap-3">
-          {/* Back button — hidden on mobile (moved to bottom bar) */}
           <button
             type="button"
-            className="projects-back-link projects-desktop-only"
+            className="projects-back-link"
             onClick={handleBack}
             aria-label={t.navBack}
           >
@@ -106,15 +105,13 @@ function ProjectsPageContent() {
 
       {/* Mobile-only floating bottom bar */}
       <div className="projects-mobile-bar">
-        <button
-          type="button"
+        <a
+          href="/axel-klecki-cv.pdf"
+          download="Axel_Klecki_CV.pdf"
           className="projects-mobile-bar-btn"
-          onClick={handleBack}
-          aria-label={t.navBack}
         >
-          <ArrowLeft className="size-4 shrink-0" strokeWidth={2} aria-hidden />
-          <span>{t.navBack}</span>
-        </button>
+          {t.downloadCV}
+        </a>
         <a
           href="https://linkedin.com/in/axelklecki"
           target="_blank"
