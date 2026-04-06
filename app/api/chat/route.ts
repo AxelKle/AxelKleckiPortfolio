@@ -31,10 +31,8 @@ export async function POST(req: Request) {
     const systemPrompt = getSystemPrompt(validLocale);
 
     // Track user message in PostHog via direct API call
-    console.log('POSTHOG_API_KEY present:', !!process.env.POSTHOG_API_KEY);
     if (process.env.POSTHOG_API_KEY) {
       const lastUserMsg = [...messages].reverse().find((m: any) => m.role === 'user');
-      console.log('lastUserMsg:', JSON.stringify(lastUserMsg));
       const userText = lastUserMsg
         ? typeof lastUserMsg.content === 'string'
           ? lastUserMsg.content
@@ -44,11 +42,10 @@ export async function POST(req: Request) {
           ? (lastUserMsg as any).parts.find((p: any) => p.type === 'text')?.text ?? ''
           : ''
         : '';
-      console.log('userText:', userText);
 
       if (userText) {
         try {
-          const phRes = await fetch('https://us.i.posthog.com/capture/', {
+          await fetch('https://us.i.posthog.com/capture/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -58,7 +55,6 @@ export async function POST(req: Request) {
               properties: { message: userText, locale: validLocale, turn: messages.filter((m: any) => m.role === 'user').length },
             }),
           });
-          console.log('PostHog response:', phRes.status, await phRes.text());
         } catch (e) {
           console.error('PostHog capture failed:', e);
         }
