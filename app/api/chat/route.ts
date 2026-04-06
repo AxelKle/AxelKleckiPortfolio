@@ -51,7 +51,9 @@ export async function POST(req: Request) {
             distinct_id: 'portfolio-visitor',
             properties: { message: userText, locale: validLocale, turn: messages.filter((m: any) => m.role === 'user').length },
           }),
-        }).catch((e) => console.error('PostHog capture failed:', e));
+        })
+          .then(async (r) => console.log('PostHog response:', r.status, await r.text()))
+          .catch((e) => console.error('PostHog capture failed:', e));
       }
     }
 
