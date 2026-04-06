@@ -70,36 +70,65 @@ function ProjectsPageContent() {
         <div className="landing-orb-3" />
       </div>
 
-      {/* Top bar — flows with content */}
+      {/* Top bar */}
       <div className="relative z-10 container flex items-center justify-between" style={{ paddingTop: '40px', paddingBottom: '20px' }}>
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              className="projects-back-link"
-              onClick={handleBack}
-              aria-label={t.navBack}
-            >
-              <ArrowLeft className="size-5 shrink-0" strokeWidth={2} aria-hidden />
-            </button>
-            <h1 className="projects-page-title">{t.projects}</h1>
-          </div>
-          <div className="flex items-center gap-2">
-            <LanguageSwitcher />
-            <a
-              href="https://linkedin.com/in/axelklecki"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="pill-nav-btn"
-            >
-              {t.linkedIn}
-            </a>
-            <a
-              href="mailto:axel@example.com"
-              className="pill-nav-btn"
-            >
-              {t.email}
-            </a>
-          </div>
+        <div className="flex items-center gap-3">
+          {/* Back button — hidden on mobile (moved to bottom bar) */}
+          <button
+            type="button"
+            className="projects-back-link projects-desktop-only"
+            onClick={handleBack}
+            aria-label={t.navBack}
+          >
+            <ArrowLeft className="size-5 shrink-0" strokeWidth={2} aria-hidden />
+          </button>
+          <h1 className="projects-page-title">{t.projects}</h1>
+        </div>
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher />
+          {/* LinkedIn + Email — hidden on mobile (moved to bottom bar) */}
+          <a
+            href="https://linkedin.com/in/axelklecki"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="pill-nav-btn projects-desktop-only"
+          >
+            {t.linkedIn}
+          </a>
+          <a
+            href="mailto:kleckiax@gmail.com"
+            className="pill-nav-btn projects-desktop-only"
+          >
+            {t.email}
+          </a>
+        </div>
+      </div>
+
+      {/* Mobile-only floating bottom bar */}
+      <div className="projects-mobile-bar">
+        <button
+          type="button"
+          className="projects-mobile-bar-btn"
+          onClick={handleBack}
+          aria-label={t.navBack}
+        >
+          <ArrowLeft className="size-4 shrink-0" strokeWidth={2} aria-hidden />
+          <span>{t.navBack}</span>
+        </button>
+        <a
+          href="https://linkedin.com/in/axelklecki"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="projects-mobile-bar-btn"
+        >
+          {t.linkedIn}
+        </a>
+        <a
+          href="mailto:kleckiax@gmail.com"
+          className="projects-mobile-bar-btn"
+        >
+          {t.email}
+        </a>
       </div>
 
       <main className="flex-1 relative container projects-page-main">

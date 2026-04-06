@@ -2627,3 +2627,78 @@ body {
     display: none;
   }
 }
+
+/* ── PROJECTS PAGE MOBILE ────────────────────────────────────── */
+.projects-desktop-only { display: flex; }
+.projects-mobile-bar   { display: none; }
+
+@media (max-width: 767px) {
+  .projects-desktop-only { display: none !important; }
+
+  /* Bottom floating bar */
+  .projects-mobile-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    padding: 8px 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+  }
+
+  .projects-mobile-bar-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-2);
+    background: none;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 100px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.15s ease, background 0.15s ease;
+  }
+
+  .projects-mobile-bar-btn:hover {
+    color: var(--ink);
+    background: rgba(107, 78, 255, 0.06);
+  }
+
+  /* Add bottom padding to projects grid so content isn't hidden behind bar */
+  .projects-page-main {
+    padding-bottom: 80px;
+  }
+}
+
+/* ── CHAT MOBILE: fixed input + viewport height fix ─────────── */
+@media (max-width: 767px) {
+  /* Use dynamic viewport height to handle mobile browser chrome */
+  .chat-layout {
+    height: 100dvh;
+  }
+
+  /* Ensure the outer chat container also uses dvh */
+  .h-screen-mobile {
+    height: 100dvh;
+  }
+
+  /* Chat input area: sticky at bottom so it doesn't scroll away */
+  .chat-input-area {
+    position: sticky;
+    bottom: 0;
+    background: rgba(247, 245, 242, 0.95);
+    backdrop-filter: blur(8px);
+    z-index: 10;
+  }
+}

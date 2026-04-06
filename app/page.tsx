@@ -10,10 +10,44 @@ import { LandingPage } from '@/components/landing/LandingPage';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { EmailPopover } from '@/components/EmailPopover';
 import { ArrowLeft } from 'lucide-react';
+import { useEffect, useRef } from 'react';
 
 function PageContent() {
   const { showChatView, goToLanding } = useApp();
   const { t } = useLanguage();
+  const chatHistoryPushedRef = useRef(false);
+
+  // Push a history state when entering chat view so back button returns to landing
+  useEffect(() => {
+    if (showChatView && !chatHistoryPushedRef.current) {
+      window.history.pushState({ axelChat: true }, '');
+      chatHistoryPushedRef.current = true;
+    }
+    if (!showChatView) {
+      chatHistoryPushedRef.current = false;
+    }
+  }, [showChatView]);
+
+  // Intercept browser/mobile back button when in chat view
+  useEffect(() => {
+    if (!showChatView) return;
+    const handlePop = () => {
+      chatHistoryPushedRef.current = false;
+      goToLanding();
+    };
+    window.addEventListener('popstate', handlePop);
+    return () => window.removeEventListener('popstate', handlePop);
+  }, [showChatView, goToLanding]);
+
+  // Back button handler: pop the history state we pushed
+  const handleGoToLanding = () => {
+    if (chatHistoryPushedRef.current) {
+      chatHistoryPushedRef.current = false;
+      window.history.back(); // triggers popstate → goToLanding()
+    } else {
+      goToLanding();
+    }
+  };
 
   const fadeStyle: React.CSSProperties = {
     animation: 'fadein 0.5s cubic-bezier(0.22, 1, 0.36, 1) both',
@@ -29,11 +63,11 @@ function PageContent() {
   }
 
   return (
-    <div className="h-screen bg-warm" style={fadeStyle}>
+    <div className="h-screen bg-warm" style={{ ...fadeStyle, height: '100dvh' }}>
       {/* Mobile back button */}
       <button
         type="button"
-        onClick={goToLanding}
+        onClick={handleGoToLanding}
         className="mobile-back-btn"
         aria-label={t.navBack}
       >
