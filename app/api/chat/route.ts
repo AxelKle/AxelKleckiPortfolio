@@ -34,13 +34,17 @@ export async function POST(req: Request) {
     console.log('POSTHOG_API_KEY present:', !!process.env.POSTHOG_API_KEY);
     if (process.env.POSTHOG_API_KEY) {
       const lastUserMsg = [...messages].reverse().find((m: any) => m.role === 'user');
+      console.log('lastUserMsg:', JSON.stringify(lastUserMsg));
       const userText = lastUserMsg
         ? typeof lastUserMsg.content === 'string'
           ? lastUserMsg.content
           : Array.isArray(lastUserMsg.content)
           ? lastUserMsg.content.find((p: any) => p.type === 'text')?.text ?? ''
+          : Array.isArray((lastUserMsg as any).parts)
+          ? (lastUserMsg as any).parts.find((p: any) => p.type === 'text')?.text ?? ''
           : ''
         : '';
+      console.log('userText:', userText);
 
       if (userText) {
         try {
