@@ -44,9 +44,9 @@ export async function POST(req: Request) {
         : '';
 
       if (userText) {
-        const ph = new PostHog(process.env.POSTHOG_API_KEY, { host: 'https://app.posthog.com' });
+        const ph = new PostHog(process.env.POSTHOG_API_KEY, { host: 'https://us.i.posthog.com' });
         ph.capture({ distinctId: 'portfolio-visitor', event: 'chat_message', properties: { message: userText, locale: validLocale, turn: messages.filter((m: any) => m.role === 'user').length } });
-        ph.shutdownAsync();
+        await ph.shutdownAsync();
       }
     }
 
