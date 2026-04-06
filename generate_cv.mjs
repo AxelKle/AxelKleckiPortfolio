@@ -199,16 +199,16 @@ async function buildCV() {
 
   y = section("Summary", y);
   const sumH = paraAt(
-    "I'm a Product Manager and Product Designer focused on building digital products that balance " +
+    "I'm a Product Manager and Product Designer, focused on building digital products that balance " +
     "user experience, business strategy, and technical feasibility. " +
-    "My background combines product strategy and UX/UI design, allowing me to work end-to-end " +
+    "My background combines product strategy and UX/UI design, allowing me to work end-to-end, " +
     "from discovery and product definition to design execution and delivery. " +
     "I've worked across fintech, marketplaces, and emerging technologies, collaborating with " +
     "cross-functional teams to turn complex ideas into intuitive and scalable products. " +
     "Recently, I've been integrating AI-assisted development workflows into product building, " +
     "using tools such as Cursor and Claude AI to rapidly prototype features, explore technical " +
     "possibilities, and accelerate product iteration. " +
-    "With a strong design foundation, I bring a user-first mindset into product decisions " +
+    "With a strong design foundation, I bring a user-first mindset into product decisions, " +
     "while ensuring alignment with business goals and technical constraints.",
     ML, y,
     { font: reg, size: 8, color: C.mid, lineH: 12 }
