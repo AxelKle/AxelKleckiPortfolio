@@ -3,6 +3,7 @@ import { convertToModelMessages } from 'ai';
 import { anthropic } from '@ai-sdk/anthropic';
 import { getSystemPrompt } from '@/lib/systemPrompt';
 import type { Locale } from '@/lib/translations';
+import { PostHog } from 'posthog-node';
 
 export const maxDuration = 60;
 
@@ -30,6 +31,24 @@ export async function POST(req: Request) {
 
     const validLocale: Locale = locale === 'es' || locale === 'en' ? locale : 'en';
     const systemPrompt = getSystemPrompt(validLocale);
+
+    // Track user message in PostHog (fire-and-forget)
+    if (process.env.POSTHOG_API_KEY) {
+      const lastUserMsg = [...messages].reverse().find((m: any) => m.role === 'user');
+      const userText = lastUserMsg
+        ? typeof lastUserMsg.content === 'string'
+          ? lastUserMsg.content
+          : Array.isArray(lastUserMsg.content)
+          ? lastUserMsg.content.find((p: any) => p.type === 'text')?.text ?? ''
+          : ''
+        : '';
+
+      if (userText) {
+        const ph = new PostHog(process.env.POSTHOG_API_KEY, { host: 'https://app.posthog.com' });
+        ph.capture({ distinctId: 'portfolio-visitor', event: 'chat_message', properties: { message: userText, locale: validLocale, turn: messages.filter((m: any) => m.role === 'user').length } });
+        ph.shutdownAsync();
+      }
+    }
 
     const result = streamText({
       model: anthropic('claude-haiku-4-5'),

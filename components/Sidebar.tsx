@@ -31,7 +31,7 @@ function SidebarProjectTitle({ title }: { title: string }) {
 
 export function Sidebar() {
   const [projects, setProjects] = useState<ProjectItem[]>([]);
-  const { chatHistory, enterChatView, goToLanding } = useApp();
+  const { goToLanding } = useApp();
   const { openSlug, openProject } = useProject();
   const { t, locale } = useLanguage();
 
@@ -88,27 +88,6 @@ export function Sidebar() {
           {t.viewAllProjects}
         </Link>
 
-        {/* Chat history — always visible */}
-        <div className="sidebar-history-section">
-          <h3 className="sidebar-section-label">{t.chatHistory}</h3>
-          {chatHistory.length === 0 ? (
-            <p className="sidebar-no-history">{t.noHistory}</p>
-          ) : (
-            <ul className="sidebar-history-list">
-              {[...chatHistory].reverse().map((q, i) => (
-                <li key={`${i}-${q.slice(0, 20)}`} className="sidebar-history-item">
-                  <button
-                    type="button"
-                    onClick={() => enterChatView(q)}
-                    className="sidebar-history-button"
-                  >
-                    <span className="sidebar-history-text truncate">{q}</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
       </div>
     </aside>
   );
