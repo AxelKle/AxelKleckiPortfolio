@@ -3,8 +3,6 @@ import { convertToModelMessages } from 'ai';
 import { anthropic } from '@ai-sdk/anthropic';
 import { getSystemPrompt } from '@/lib/systemPrompt';
 import type { Locale } from '@/lib/translations';
-import { PostHog } from 'posthog-node';
-
 export const maxDuration = 60;
 
 export async function POST(req: Request) {
@@ -32,7 +30,7 @@ export async function POST(req: Request) {
     const validLocale: Locale = locale === 'es' || locale === 'en' ? locale : 'en';
     const systemPrompt = getSystemPrompt(validLocale);
 
-    // Track user message in PostHog (fire-and-forget)
+    // Track user message in PostHog via direct API call
     if (process.env.POSTHOG_API_KEY) {
       const lastUserMsg = [...messages].reverse().find((m: any) => m.role === 'user');
       const userText = lastUserMsg
@@ -44,9 +42,16 @@ export async function POST(req: Request) {
         : '';
 
       if (userText) {
-        const ph = new PostHog(process.env.POSTHOG_API_KEY, { host: 'https://us.i.posthog.com' });
-        ph.capture({ distinctId: 'portfolio-visitor', event: 'chat_message', properties: { message: userText, locale: validLocale, turn: messages.filter((m: any) => m.role === 'user').length } });
-        await ph.shutdownAsync();
+        fetch('https://us.i.posthog.com/capture/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            api_key: process.env.POSTHOG_API_KEY,
+            event: 'chat_message',
+            distinct_id: 'portfolio-visitor',
+            properties: { message: userText, locale: validLocale, turn: messages.filter((m: any) => m.role === 'user').length },
+          }),
+        }).catch((e) => console.error('PostHog capture failed:', e));
       }
     }
 
