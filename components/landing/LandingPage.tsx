@@ -32,51 +32,16 @@ function useFeaturedVisibleCols() {
   return cols;
 }
 
-const SKILLS = [
-  'Product Manager', 'UX Design', 'Web3', 'AI Workflows', 'Figma',
-  'Product Strategy', 'DeFi', 'Tokenization', 'Mini Apps', 'DAO',
-  'Mobile-first', 'Prototyping', 'Design Systems', 'B2B', 'Agile',
-];
-
 export function LandingPage() {
   const [input, setInput] = useState('');
   const [featuredProjects, setFeaturedProjects] = useState<ProjectItem[]>([]);
   const [featuredStart, setFeaturedStart] = useState(0);
   const [slideLayout, setSlideLayout] = useState({ offsetPx: 0, cardWidthPx: 0 });
   const featuredViewportRef = useRef<HTMLDivElement>(null);
-  const cursorOrbRef = useRef<HTMLDivElement>(null);
-  const posRef = useRef({ x: -999, y: -999 });
-  const targetRef = useRef({ x: -999, y: -999 });
   const visibleFeaturedCols = useFeaturedVisibleCols();
   const { enterChatView } = useApp();
   const { openProject } = useProject();
   const { t, locale } = useLanguage();
-
-  // Cursor-following orb
-  useEffect(() => {
-    const handleMove = (e: MouseEvent) => {
-      targetRef.current = { x: e.clientX, y: e.clientY };
-    };
-    window.addEventListener('mousemove', handleMove, { passive: true });
-
-    let rafId: number;
-    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-    const animate = () => {
-      posRef.current.x = lerp(posRef.current.x, targetRef.current.x, 0.06);
-      posRef.current.y = lerp(posRef.current.y, targetRef.current.y, 0.06);
-      if (cursorOrbRef.current) {
-        cursorOrbRef.current.style.transform =
-          `translate(${posRef.current.x - 250}px, ${posRef.current.y - 250}px)`;
-      }
-      rafId = requestAnimationFrame(animate);
-    };
-    rafId = requestAnimationFrame(animate);
-
-    return () => {
-      window.removeEventListener('mousemove', handleMove);
-      cancelAnimationFrame(rafId);
-    };
-  }, []);
 
   const isMobile = visibleFeaturedCols === 1;
 
@@ -208,7 +173,6 @@ export function LandingPage() {
           <div className="landing-orb landing-orb-1" />
           <div className="landing-orb landing-orb-2" />
           <div className="landing-orb landing-orb-3" />
-          <div className="landing-orb landing-orb-cursor" ref={cursorOrbRef} />
         </div>
 
         <div className="w-full max-w-4xl flex flex-col items-center relative">
@@ -221,20 +185,8 @@ export function LandingPage() {
             {t.subtitle}
           </p>
 
-          {/* Skills marquee */}
-          <div className="skills-marquee w-full" style={{ marginTop: '28px' }}>
-            <div className="skills-marquee-track">
-              {[...SKILLS, ...SKILLS].map((skill, i) => (
-                <span key={i} className="skills-marquee-item">
-                  {skill}
-                  <span className="skills-marquee-dot" aria-hidden />
-                </span>
-              ))}
-            </div>
-          </div>
-
           {/* Search bar */}
-          <div className="landing-search-wrap w-full hero-anim-3" style={{ marginTop: '28px' }}>
+          <div className="landing-search-wrap w-full hero-anim-3" style={{ marginTop: '48px' }}>
             <input
               type="text"
               value={input}
