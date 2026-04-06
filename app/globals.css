@@ -2731,16 +2731,18 @@ body::after {
 
 /* ── SKILLS MARQUEE ─────────────────────────────────────────── */
 .skills-marquee {
+  position: relative;
   overflow: hidden;
   width: 100%;
-  mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,1) 12%, rgba(0,0,0,1) 88%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,1) 12%, rgba(0,0,0,1) 88%, transparent 100%);
 }
 
 .skills-marquee-track {
   display: flex;
+  flex-wrap: nowrap;
   width: max-content;
-  animation: marqueeScroll 28s linear infinite;
+  animation: marqueeScroll 32s linear infinite;
 }
 
 .skills-marquee-track:hover {
@@ -2748,30 +2750,32 @@ body::after {
 }
 
 .skills-marquee-item {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 20px;
-  padding: 0 20px;
-  font-size: 12px;
+  gap: 12px;
+  padding: 6px 16px;
+  font-size: 11px;
   font-weight: 500;
   color: var(--ink-3);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .skills-marquee-dot {
+  display: inline-block;
   width: 3px;
   height: 3px;
   border-radius: 50%;
   background: var(--ink-3);
-  opacity: 0.5;
+  opacity: 0.4;
   flex-shrink: 0;
 }
 
 @keyframes marqueeScroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 /* ── CURSOR ORB ─────────────────────────────────────────────── */

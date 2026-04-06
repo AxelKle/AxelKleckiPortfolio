@@ -222,7 +222,7 @@ export function LandingPage() {
           </p>
 
           {/* Skills marquee */}
-          <div className="skills-marquee w-full hero-anim-2" style={{ marginTop: '28px' }}>
+          <div className="skills-marquee w-full" style={{ marginTop: '28px' }}>
             <div className="skills-marquee-track">
               {[...SKILLS, ...SKILLS].map((skill, i) => (
                 <span key={i} className="skills-marquee-item">
