@@ -43,18 +43,21 @@ export async function POST(req: Request) {
         : '';
 
       if (userText) {
-        fetch('https://us.i.posthog.com/capture/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            api_key: process.env.POSTHOG_API_KEY,
-            event: 'chat_message',
-            distinct_id: 'portfolio-visitor',
-            properties: { message: userText, locale: validLocale, turn: messages.filter((m: any) => m.role === 'user').length },
-          }),
-        })
-          .then(async (r) => console.log('PostHog response:', r.status, await r.text()))
-          .catch((e) => console.error('PostHog capture failed:', e));
+        try {
+          const phRes = await fetch('https://us.i.posthog.com/capture/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              api_key: process.env.POSTHOG_API_KEY,
+              event: 'chat_message',
+              distinct_id: 'portfolio-visitor',
+              properties: { message: userText, locale: validLocale, turn: messages.filter((m: any) => m.role === 'user').length },
+            }),
+          });
+          console.log('PostHog response:', phRes.status, await phRes.text());
+        } catch (e) {
+          console.error('PostHog capture failed:', e);
+        }
       }
     }
 
