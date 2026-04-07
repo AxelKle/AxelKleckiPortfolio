@@ -22,11 +22,20 @@ export const metadata: Metadata = {
     siteName: 'Axel Klecki Portfolio',
     locale: 'es_AR',
     type: 'website',
+    images: [
+      {
+        url: 'https://axelklecki.site/landing.png',
+        width: 1512,
+        height: 784,
+        alt: 'Axel Klecki — PM & Design Strategist',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Axel Klecki | PM & Design Strategist',
     description: 'Portfolio de Axel Klecki — PM y diseñador. Preguntame lo que quieras sobre mi experiencia, proyectos y forma de trabajar.',
+    images: ['https://axelklecki.site/landing.png'],
   },
   icons: {
     icon: [
