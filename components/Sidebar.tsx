@@ -17,15 +17,16 @@ const TITLE_SUBTITLE_SPLIT = /^(.+?)\s*[—–]\s*(.+)$/;
 function SidebarProjectTitle({ title }: { title: string }) {
   const match = title.match(TITLE_SUBTITLE_SPLIT);
   if (!match) {
-    return <strong className="sidebar-project-name">{title}</strong>;
+    return (
+      <span className="sidebar-project-name">{title}</span>
+    );
   }
   const [, name, subtitle] = match;
   return (
-    <>
-      <strong className="sidebar-project-name">{name}</strong>
-      {' — '}
-      {subtitle}
-    </>
+    <span className="sidebar-project-stack">
+      <span className="sidebar-project-name">{name}</span>
+      <span className="sidebar-project-sub">{subtitle}</span>
+    </span>
   );
 }
 
@@ -42,7 +43,7 @@ export function Sidebar() {
       .catch(() => setProjects([]));
   }, [locale]);
 
-  const visibleProjects = projects.slice(0, 4);
+  const visibleProjects = projects.slice(0, 6);
 
   return (
     <aside className="sidebar w-[260px] shrink-0">
@@ -50,7 +51,9 @@ export function Sidebar() {
         {/* Profile section */}
         <div className="sidebar-profile-section">
           <button onClick={goToLanding} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}>
-            <img src="/axel-avatar.png" alt="Axel Klecki" className="avatar-gradient-sidebar" style={{ objectFit: 'cover', borderRadius: '50%', display: 'block' }} />
+            <div className="sidebar-avatar-wrap">
+              <img src="/axel-avatar.png" alt="Axel Klecki" style={{ objectFit: 'cover' }} />
+            </div>
           </button>
           <div className="sidebar-profile-info">
             <span className="sidebar-profile-name">{t.name}</span>
@@ -85,7 +88,8 @@ export function Sidebar() {
           )}
         </ul>
         <Link href="/projects" className="sidebar-view-all">
-          {t.viewAllProjects}
+          Ver todos los proyectos
+          <span className="sidebar-view-all-arrow">→</span>
         </Link>
 
       </div>

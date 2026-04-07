@@ -55,10 +55,12 @@ function PageContent() {
 
   if (!showChatView) {
     return (
-      <div style={fadeStyle}>
-        <LandingPage />
+      <>
+        <div style={fadeStyle}>
+          <LandingPage />
+        </div>
         <ProjectModalShell />
-      </div>
+      </>
     );
   }
 
