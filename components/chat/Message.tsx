@@ -46,8 +46,6 @@ export function Message({ role, content, index = 0 }: MessageProps) {
   const showViewAll = shouldShowViewAllProjects(content);
   const cleanContent = content
     .replace(/\[VER_PROYECTOS\]/gi, '')
-    .replace(/\s*—\s*/g, '. ')
-    .replace(/,\s*(y|e)\s/gi, ' $1 ')
     .trim();
 
   return (
