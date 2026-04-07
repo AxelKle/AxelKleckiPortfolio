@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useLayoutEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Send } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { useProject } from '@/context/ProjectContext';
@@ -201,7 +201,7 @@ export function LandingPage() {
               disabled={!input.trim()}
               className="landing-search-btn"
             >
-              <Search className="size-5" />
+              <Send className="size-5" />
             </button>
           </div>
 

@@ -1814,6 +1814,8 @@ body {
   }
 }
 
+/* Animated gradient ring on hover — wrapper sits outside overflow:hidden card */
+
 .featured-project-card {
   position: relative;
   display: flex;
