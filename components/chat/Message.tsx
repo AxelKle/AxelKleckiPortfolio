@@ -44,7 +44,10 @@ export function Message({ role, content, index = 0 }: MessageProps) {
 
   const companies = getCompaniesMentionedInText(content);
   const showViewAll = shouldShowViewAllProjects(content);
-  const cleanContent = content.replace(/\[VER_PROYECTOS\]/gi, '').trim();
+  const cleanContent = content
+    .replace(/\[VER_PROYECTOS\]/gi, '')
+    .replace(/\s*—\s*/g, '. ')
+    .trim();
 
   return (
     <div className="msg-ai">
