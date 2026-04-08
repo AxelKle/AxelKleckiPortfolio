@@ -51,7 +51,14 @@ export function Message({ role, content, index = 0 }: MessageProps) {
 
   return (
     <div className="msg-ai">
-      <div className="avatar-gradient avatar-gradient-msg">{icon}</div>
+      {/* Desktop: gradient icon */}
+      <div className="avatar-gradient avatar-gradient-msg msg-avatar-desktop">{icon}</div>
+      {/* Mobile: profile photo */}
+      <img
+        src="/axel-avatar.png"
+        alt="Axel Klecki"
+        className="msg-avatar-mobile"
+      />
       <div>
         <div className="msg-ai-name">Axel Klecki</div>
         <div className="msg-ai-bubble">
