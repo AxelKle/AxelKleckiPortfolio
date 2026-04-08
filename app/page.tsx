@@ -14,7 +14,9 @@ import { useEffect, useRef } from 'react';
 
 function PageContent() {
   const { showChatView, goToLanding } = useApp();
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
+  const cvHref     = locale === 'es' ? '/axel-klecki-cv-es.pdf' : '/axel-klecki-cv.pdf';
+  const cvFilename = locale === 'es' ? 'Axel_Klecki_CV_ES.pdf'  : 'Axel_Klecki_CV.pdf';
   const chatHistoryPushedRef = useRef(false);
 
   // Push a history state when entering chat view so back button returns to landing
@@ -80,8 +82,8 @@ function PageContent() {
       <div className="chat-topbar-ctas fixed top-5 right-5 z-50 flex items-center gap-2">
         <LanguageSwitcher />
         <a
-          href="/axel-klecki-cv.pdf"
-          download="Axel_Klecki_CV.pdf"
+          href={cvHref}
+          download={cvFilename}
           className="pill-nav-btn pill-nav-btn--cv"
         >
           {t.downloadCV}

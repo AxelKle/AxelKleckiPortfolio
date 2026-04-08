@@ -44,6 +44,13 @@ export function LandingPage() {
   const { t, locale } = useLanguage();
 
   const isMobile = visibleFeaturedCols === 1;
+  const cvHref     = locale === 'es' ? '/axel-klecki-cv-es.pdf' : '/axel-klecki-cv.pdf';
+  const cvFilename = locale === 'es' ? 'Axel_Klecki_CV_ES.pdf'  : 'Axel_Klecki_CV.pdf';
+
+  // Ensure page always loads at the top on mobile (browser scroll restoration can offset it)
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     fetch(`/api/projects?locale=${locale}`, { cache: 'no-store' })
@@ -163,8 +170,8 @@ export function LandingPage() {
       </div>
       <div className="fixed top-4 right-4 z-50 flex items-center gap-2">
         <a
-          href="/axel-klecki-cv.pdf"
-          download="Axel_Klecki_CV.pdf"
+          href={cvHref}
+          download={cvFilename}
           className="pill-nav-btn pill-nav-btn--cv landing-header-cv"
         >
           {t.downloadCV}
@@ -308,8 +315,8 @@ export function LandingPage() {
           </a>
         </p>
         <a
-          href="/axel-klecki-cv.pdf"
-          download="Axel_Klecki_CV.pdf"
+          href={cvHref}
+          download={cvFilename}
           className="pill-nav-btn mt-3"
         >
           {t.downloadCV}

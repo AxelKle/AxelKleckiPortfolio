@@ -32,6 +32,8 @@ export default function ProjectsPage() {
 function ProjectsPageContent() {
   const [projects, setProjects] = useState<ProjectItem[]>([]);
   const { t, locale } = useLanguage();
+  const cvHref     = locale === 'es' ? '/axel-klecki-cv-es.pdf' : '/axel-klecki-cv.pdf';
+  const cvFilename = locale === 'es' ? 'Axel_Klecki_CV_ES.pdf'  : 'Axel_Klecki_CV.pdf';
   const { openProject } = useProject();
   const router = useRouter();
 
@@ -107,8 +109,8 @@ function ProjectsPageContent() {
       {/* Mobile-only floating bottom bar */}
       <div className="projects-mobile-bar">
         <a
-          href="/axel-klecki-cv.pdf"
-          download="Axel_Klecki_CV.pdf"
+          href={cvHref}
+          download={cvFilename}
           className="projects-mobile-bar-btn"
         >
           {t.downloadCV}
