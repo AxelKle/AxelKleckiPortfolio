@@ -33,7 +33,10 @@ function PageContent() {
   // Intercept browser/mobile back button when in chat view
   useEffect(() => {
     if (!showChatView) return;
-    const handlePop = () => {
+    const handlePop = (e: PopStateEvent) => {
+      // If we're popping back to the chat state (e.g. closing a project modal),
+      // don't go to landing — the modal already closed itself.
+      if (e.state?.axelChat) return;
       chatHistoryPushedRef.current = false;
       goToLanding();
     };
