@@ -163,10 +163,15 @@ export function LandingPage() {
     <div className="min-h-screen flex flex-col bg-warm">
       {/* Floating nav */}
       <div className="fixed top-4 left-4 z-50">
-        <span className="avail-badge">
+        <a
+          href="https://www.linkedin.com/in/axelklecki/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="avail-badge"
+        >
           <span className="avail-badge-dot" />
           {t.availableForWork}
-        </span>
+        </a>
       </div>
       <div className="fixed top-4 right-4 z-50 flex items-center gap-2">
         <a

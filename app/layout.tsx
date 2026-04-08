@@ -12,6 +12,9 @@ const bricolage = Bricolage_Grotesque({
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });
 
 export const metadata: Metadata = {
+  other: {
+    'google': 'notranslate',
+  },
   title: 'Axel Klecki | PM & Design Strategist',
   description: 'Portfolio de Axel Klecki — PM y diseñador. Preguntame lo que quieras sobre mi experiencia, proyectos y forma de trabajar.',
   metadataBase: new URL('https://axelklecki.site'),
@@ -54,7 +57,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" translate="no">
       <body className={`${bricolage.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
         <MobileOverlay />
         {children}

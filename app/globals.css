@@ -709,11 +709,11 @@ body {
   color: var(--ink-2);
 }
 
-.avail-badge-sidebar {
-  width: 100%;
+.avail-badge.avail-badge-sidebar {
   justify-content: center;
-  font-size: 11px;
-  padding: 7px 12px;
+  font-size: 10px;
+  padding: 5px 10px;
+  gap: 5px;
 }
 
 .avatar-gradient-msg {
@@ -1395,6 +1395,16 @@ body {
   transform: skewX(-15deg);
   animation: avail-shimmer 4.5s ease-in-out infinite;
   pointer-events: none;
+}
+
+a.avail-badge {
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+a.avail-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.20);
 }
 
 @keyframes avail-shimmer {
